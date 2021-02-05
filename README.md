@@ -5,7 +5,7 @@ Early draft, I would not start depending on this yet if I were you.
 
 ## Purpose and motivation
 
-I needed a valid reason to name a variable `_____________________________`.
+I needed a valid reason to name a method `_____________________________`.
 
 ## Features
 
