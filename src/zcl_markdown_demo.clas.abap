@@ -17,6 +17,8 @@ CLASS zcl_markdown_demo IMPLEMENTATION.
   METHOD get.
 
     md = NEW zcl_markdown( ).
+    DATA(style) = md->style.
+
     md = md->heading( level = 1 val = |Markdown generator - showcase| ).
 
     DO 6 TIMES.
@@ -24,10 +26,13 @@ CLASS zcl_markdown_demo IMPLEMENTATION.
     ENDDO.
 
     md->text( 'This is text.'
-      )->bold( 'This is bold text.'
-      )->italic( 'This is italic text.'
-      )->italic_bold( `This is italic bold text.`
-      )->bold_italic( `This is bold italic text. Carefully note the difference.`
+      )->text( style->bold( 'This is bold text.' )
+      )->text( style->italic( 'This is italic text.' )
+      )->text( style->italic_bold( `This is italic bold text.` )
+      )->text( style->bold_italic( `This is bold italic text. Carefully note the difference.` )
+
+      )->text( |{ style->italic( 'This is italic' ) } and { style->bold( 'this is bold.' ) }|
+      )->text( |The method { style->inline_code( 'zcl_mardown_style->inline_code' ) } outputs inline code.|
 
       )->heading( level = 2 val = `Blockquotes`
         )->blockquote( md->document
@@ -62,7 +67,14 @@ CLASS zcl_markdown_demo IMPLEMENTATION.
         |  ( `Item 1` )\r\n| &
         |  ( `Item 2` )\r\n| &
         |  ( `Item 3` )\r\n| &
-        |) ).| ).
+        |) ).|
+    )->table( VALUE stringtab(
+      ( `col1;col2;col3;col4;` )
+      ( `a;b;c;d` )
+      ( `1;2;3;4;`)
+      ( `e;f;g;h;` )
+      ( |{ style->bold( `bold` ) };{ style->italic( `italic` ) };{ style->bold_italic( `bold_italic` ) }{ style->inline_code( `code` ) };;| )
+    ) ).
   ENDMETHOD.
 
 ENDCLASS.

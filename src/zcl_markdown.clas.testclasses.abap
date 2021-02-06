@@ -29,6 +29,8 @@ CLASS lcl_test IMPLEMENTATION.
       |*This is italic text.*\r\n| &
       |***This is italic bold text.***\r\n| &
       |***This is bold italic text. Carefully note the difference.***\r\n| &
+      |*This is italic* and **this is bold.**\r\n| &
+      |The method `zcl_mardown_style->inline_code` outputs inline code.\r\n| &
       |## Blockquotes\r\n| &
       |> # Markdown generator - showcase\r\n| &
       |> # Heading 1\r\n| &
@@ -42,6 +44,8 @@ CLASS lcl_test IMPLEMENTATION.
       |> *This is italic text.*\r\n| &
       |> ***This is italic bold text.***\r\n| &
       |> ***This is bold italic text. Carefully note the difference.***\r\n| &
+      |> *This is italic* and **this is bold.**\r\n| &
+      |> The method `zcl_mardown_style->inline_code` outputs inline code.\r\n| &
       |> ## Blockquotes\r\n| &
       |## Nested Blockquotes\r\n| &
       |> # Markdown generator - showcase\r\n| &
@@ -56,6 +60,8 @@ CLASS lcl_test IMPLEMENTATION.
       |> *This is italic text.*\r\n| &
       |> ***This is italic bold text.***\r\n| &
       |> ***This is bold italic text. Carefully note the difference.***\r\n| &
+      |> *This is italic* and **this is bold.**\r\n| &
+      |> The method `zcl_mardown_style->inline_code` outputs inline code.\r\n| &
       |> ## Blockquotes\r\n| &
       |> > # Markdown generator - showcase\r\n| &
       |> > # Heading 1\r\n| &
@@ -69,6 +75,8 @@ CLASS lcl_test IMPLEMENTATION.
       |> > *This is italic text.*\r\n| &
       |> > ***This is italic bold text.***\r\n| &
       |> > ***This is bold italic text. Carefully note the difference.***\r\n| &
+      |> > *This is italic* and **this is bold.**\r\n| &
+      |> > The method `zcl_mardown_style->inline_code` outputs inline code.\r\n| &
       |> > ## Blockquotes\r\n| &
       |> ## Nested Blockquotes\r\n| &
       |## Unordered Lists\r\n| &
@@ -94,7 +102,13 @@ CLASS lcl_test IMPLEMENTATION.
       |  ( `Item 2` )\r\n| &
       |  ( `Item 3` )\r\n| &
       |) ).\r\n| &
-      |```| ).
+      |```\r\n| &
+      |\| col1\| col2\| col3\| col4 \|\r\n| &
+      |\|------\|------\|------\|------\| \r\n| &
+      |\| a \| b \| c \| d \|\r\n| &
+      |\| 1 \| 2 \| 3 \| 4 \|\r\n| &
+      |\| e \| f \| g \| h \|\r\n| &
+      |\| **bold** \| *italic* \| ***bold_italic***`code` \|  \|\r\n| ).
   ENDMETHOD.
 
 ENDCLASS.
