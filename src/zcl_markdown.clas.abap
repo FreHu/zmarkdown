@@ -1,5 +1,4 @@
-CLASS zcl_markdown DEFINITION
-  PUBLIC FINAL.
+CLASS zcl_markdown DEFINITION PUBLIC.
 
   PUBLIC SECTION.
 
@@ -152,6 +151,8 @@ CLASS zcl_markdown IMPLEMENTATION.
           " | a    | b    | c    | d    |
           append_line( `| ` && concat_lines_of( table = columns sep = ` | ` ) && ` |` ).
         ENDLOOP.
+
+        append_line( `` ).
 
       CATCH cx_root INTO DATA(cx).
         RAISE EXCEPTION NEW zcx_markdown( reason = `Invalid table data.` ).

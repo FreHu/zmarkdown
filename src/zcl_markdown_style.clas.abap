@@ -34,6 +34,7 @@ CLASS zcl_markdown_style DEFINITION
     "! Inline code (`val`)
     METHODS inline_code
       IMPORTING val           TYPE string
+                omit_empty    TYPE abap_bool DEFAULT abap_true
       RETURNING VALUE(result) TYPE string.
 
   PROTECTED SECTION.
@@ -61,6 +62,9 @@ CLASS zcl_markdown_style IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD inline_code.
+    IF omit_empty = abap_true.
+      CHECK val IS NOT INITIAL.
+    ENDIF.
     result = |`{ val }`|.
   ENDMETHOD.
 
