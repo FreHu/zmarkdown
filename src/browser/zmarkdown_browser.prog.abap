@@ -30,7 +30,7 @@ form everything.
     message 'Selection empty' type 'S' display like 'E'.
     return.
   else.
-    data(gui) = new zcl_markdown_browser_gui(
+    new zcl_markdown_browser_gui(
       program = sy-repid
       screen_number = '0999'
       objects = objects ).
