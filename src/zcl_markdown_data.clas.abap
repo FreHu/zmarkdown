@@ -17,7 +17,6 @@ class zcl_markdown_data definition public
     methods data_table
       importing data             type any table
                 auto_header_row  type abap_bool default abap_true
-                initial_elements type abap_bool default abap_false
       returning value(self)      type ref to zcl_markdown_data.
 
   protected section.
