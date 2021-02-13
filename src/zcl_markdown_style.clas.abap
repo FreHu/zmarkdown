@@ -1,71 +1,71 @@
-CLASS zcl_markdown_style DEFINITION
-  PUBLIC FINAL.
+class zcl_markdown_style definition
+  public final.
 
-  PUBLIC SECTION.
+  public section.
 
     "! Bold (**val**)
-    METHODS bold
-      IMPORTING val           TYPE string
-      RETURNING VALUE(result) TYPE string.
+    methods bold
+      importing val           type string
+      returning value(result) type string.
 
     "! Italic (**val**)
-    METHODS italic
-      IMPORTING val           TYPE string
-      RETURNING VALUE(result) TYPE string.
+    methods italic
+      importing val           type string
+      returning value(result) type string.
 
     "! Italic bold (***val***) <br>
     "! You might think this is the same thing as bold_italic, but <br>
     "! - in italic_bold, the first * represents italic and the last ** represent bold <br>
     "! - in bold_italic, the first two ** represent bold and the last * represents italic <br>
     "! This fact should have no practical consequences whatsoever.
-    METHODS italic_bold
-      IMPORTING val           TYPE string
-      RETURNING VALUE(result) TYPE string.
+    methods italic_bold
+      importing val           type string
+      returning value(result) type string.
 
     "! Bold italic (***val***) <br>
     "! You might think this is the same thing as italic_bold, but <br>
     "! - in italic_bold, the first * represents italic and the last ** represent bold <br>
     "! - in bold_italic, the first two ** represent bold and the last * represents italic <br>
     "! This fact should have no practical consequences whatsoever.
-    METHODS bold_italic
-      IMPORTING val           TYPE string
-      RETURNING VALUE(result) TYPE string.
+    methods bold_italic
+      importing val           type string
+      returning value(result) type string.
 
     "! Inline code (`val`)
-    METHODS inline_code
-      IMPORTING val           TYPE string
-                omit_empty    TYPE abap_bool DEFAULT abap_true
-      RETURNING VALUE(result) TYPE string.
+    methods inline_code
+      importing val           type string
+                omit_empty    type abap_bool default abap_true
+      returning value(result) type string.
 
-  PROTECTED SECTION.
-  PRIVATE SECTION.
-ENDCLASS.
+  protected section.
+  private section.
+endclass.
 
 
 
-CLASS zcl_markdown_style IMPLEMENTATION.
+class zcl_markdown_style implementation.
 
-  METHOD bold.
+  method bold.
     result = |**{ val }**|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD italic.
+  method italic.
     result = |*{  val }*|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD italic_bold.
+  method italic_bold.
     result = |***{  val }***|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD bold_italic.
+  method bold_italic.
     result = |***{  val }***|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD inline_code.
-    IF omit_empty = abap_true.
-      CHECK val IS NOT INITIAL.
-    ENDIF.
+  method inline_code.
+    if omit_empty = abap_true.
+      check val is not initial.
+    endif.
     result = |`{ val }`|.
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

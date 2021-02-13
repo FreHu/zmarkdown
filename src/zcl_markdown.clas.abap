@@ -1,144 +1,141 @@
-CLASS zcl_markdown DEFINITION PUBLIC.
+class zcl_markdown definition public.
 
-  PUBLIC SECTION.
+  public section.
 
-    DATA: document TYPE string READ-ONLY,
-          style    TYPE REF TO zcl_markdown_style.
+    data: document type string read-only,
+          style    type ref to zcl_markdown_style.
 
-    METHODS constructor.
+    methods constructor.
 
     "! Horizontal rule
-    METHODS ______________________________
-      RETURNING VALUE(self) TYPE REF TO zcl_markdown.
+    methods ______________________________
+      returning value(self) type ref to zcl_markdown.
 
     "! Heading (###)
-    METHODS heading
-      IMPORTING level       TYPE i
-                val         TYPE string
-      RETURNING VALUE(self) TYPE REF TO zcl_markdown.
+    methods heading
+      importing level       type i
+                val         type string
+      returning value(self) type ref to zcl_markdown.
 
-    METHODS text
-      IMPORTING val         TYPE string
-      RETURNING VALUE(self) TYPE REF TO zcl_markdown.
+    methods text
+      importing val         type string
+      returning value(self) type ref to zcl_markdown.
 
-    METHODS blockquote
-      IMPORTING val         TYPE string
-      RETURNING VALUE(self) TYPE REF TO zcl_markdown.
+    methods blockquote
+      importing val         type string
+      returning value(self) type ref to zcl_markdown.
 
-    METHODS list
-      IMPORTING items       TYPE stringtab
-      RETURNING VALUE(self) TYPE REF TO zcl_markdown.
+    methods list
+      importing items       type stringtab
+      returning value(self) type ref to zcl_markdown.
 
-    METHODS numbered_list
-      IMPORTING items       TYPE stringtab
-      RETURNING VALUE(self) TYPE REF TO zcl_markdown.
+    methods numbered_list
+      importing items       type stringtab
+      returning value(self) type ref to zcl_markdown.
 
-    METHODS code_block
-      IMPORTING val         TYPE string
-                language    TYPE string DEFAULT `abap`
-      RETURNING VALUE(self) TYPE REF TO zcl_markdown.
+    methods code_block
+      importing val         type string
+                language    type string default `abap`
+      returning value(self) type ref to zcl_markdown.
 
-    METHODS table
-      IMPORTING lines       TYPE stringtab
-                delimiter   TYPE string DEFAULT `;`
-      RETURNING VALUE(self) TYPE REF TO zcl_markdown.
+    methods table
+      importing lines       type stringtab
+                delimiter   type string default `;`
+      returning value(self) type ref to zcl_markdown.
 
-    METHODS as_markdown
-      RETURNING
-        VALUE(result) TYPE string.
+    methods as_markdown
+      returning
+        value(result) type string.
 
-    METHODS as_html
-      RETURNING
-        VALUE(result) TYPE string.
+    methods as_html
+      returning
+        value(result) type string.
 
-  PRIVATE SECTION.
-    METHODS append
-      IMPORTING val TYPE string.
+  private section.
+    methods append_line
+      importing val type string.
 
-    METHODS append_line
-      IMPORTING val TYPE string.
-
-    CLASS-METHODS n_times
-      IMPORTING val           TYPE string
-                n             TYPE i
-      RETURNING VALUE(result) TYPE string.
-ENDCLASS.
+    class-methods n_times
+      importing val           type string
+                n             type i
+      returning value(result) type string.
+endclass.
 
 
 
-CLASS zcl_markdown IMPLEMENTATION.
+class zcl_markdown implementation.
 
-  METHOD constructor.
-    me->style = NEW #( ).
-  ENDMETHOD.
+  method constructor.
+    me->style = new #( ).
+  endmethod.
 
-  METHOD text.
+  method text.
     document = document && |{ val }\r\n|.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD blockquote.
-    SPLIT val AT |\r\n| INTO TABLE DATA(lines).
-    LOOP AT lines ASSIGNING FIELD-SYMBOL(<line>).
+  method blockquote.
+    split val at |\r\n| into table data(lines).
+    loop at lines assigning field-symbol(<line>).
       document = document && |> { <line> }\r\n|.
-    ENDLOOP.
+    endloop.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD list.
-    LOOP AT items ASSIGNING FIELD-SYMBOL(<item>).
+  method list.
+    loop at items assigning field-symbol(<item>).
       document = document && |- { <item> }\r\n|.
-    ENDLOOP.
+    endloop.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD numbered_list.
-    DATA(index) = 0.
-    LOOP AT items ASSIGNING FIELD-SYMBOL(<item>).
+  method numbered_list.
+    data(index) = 0.
+    loop at items assigning field-symbol(<item>).
       index = index + 1.
       document = document && |{ index }. { <item> }\r\n|.
-    ENDLOOP.
+    endloop.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD n_times.
-    DO n TIMES.
+  method n_times.
+    do n times.
       result = result && val.
-    ENDDO.
-  ENDMETHOD.
+    enddo.
+  endmethod.
 
-  METHOD code_block.
+  method code_block.
     document = document && |```{ language }\r\n{ val }\r\n```\r\n|.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD heading.
+  method heading.
 
-    IF level < 1 OR level > 6.
-      RAISE EXCEPTION NEW zcx_markdown( reason = 'Invalid heading level.' ).
-    ENDIF.
+    if level < 1 or level > 6.
+      raise exception new zcx_markdown( reason = 'Invalid heading level.' ).
+    endif.
 
     document = document && |{ n_times( val = `#` n = level ) } { val }\r\n|.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD as_markdown.
+  method as_markdown.
     result = document.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD ______________________________.
+  method ______________________________.
     document = document && |{ n_times( val = `_` n = 10 ) } \r\n|.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD as_html.
+  method as_html.
     result = cl_ktd_dita_markdown_api=>transform_md_to_html( document ).
-  ENDMETHOD.
+  endmethod.
 
-  METHOD table.
-    TRY.
-        DATA(header) = lines[ 1 ].
-        SPLIT header AT delimiter INTO TABLE DATA(columns).
+  method table.
+    try.
+        data(header) = lines[ 1 ].
+        split header at delimiter into table data(columns).
 
         "| col1 | col2 | col3 | col4 |
         append_line( `| ` && concat_lines_of( table = columns sep = `| ` ) && ` |` ).
@@ -146,25 +143,22 @@ CLASS zcl_markdown IMPLEMENTATION.
         "|------|------|------|------|
         append_line( n_times( val = `|------` n = lines( columns ) ) && `| ` ).
 
-        LOOP AT lines ASSIGNING FIELD-SYMBOL(<line>) FROM 2.
-          SPLIT <line> AT delimiter INTO TABLE columns.
+        loop at lines assigning field-symbol(<line>) from 2.
+          split <line> at delimiter into table columns.
           " | a    | b    | c    | d    |
           append_line( `| ` && concat_lines_of( table = columns sep = ` | ` ) && ` |` ).
-        ENDLOOP.
+        endloop.
 
         append_line( `` ).
 
-      CATCH cx_root INTO DATA(cx).
-        RAISE EXCEPTION NEW zcx_markdown( reason = `Invalid table data.` ).
-    ENDTRY.
-  ENDMETHOD.
+      catch cx_root.
+        raise exception new zcx_markdown( reason = `Invalid table data.` ).
+    endtry.
+    self = me.
+  endmethod.
 
-  METHOD append.
-    document = document && val.
-  ENDMETHOD.
-
-  METHOD append_line.
+  method append_line.
     document = document && val && |\r\n|.
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

@@ -1,19 +1,19 @@
-CLASS lcl_test DEFINITION FINAL FOR TESTING
-  INHERITING FROM zcl_abap_unit_wrapper
-  DURATION SHORT
-  RISK LEVEL HARMLESS.
+class lcl_test definition final for testing
+  inheriting from zcl_abap_unit_wrapper
+  duration short
+  risk level harmless.
 
-  PRIVATE SECTION.
-    METHODS:
-      regression_test FOR TESTING RAISING cx_static_check.
+  private section.
+    methods:
+      regression_test for testing raising cx_static_check.
 
-ENDCLASS.
+endclass.
 
 
-CLASS lcl_test IMPLEMENTATION.
+class lcl_test implementation.
 
-  METHOD regression_test.
-    DATA(demo) = zcl_markdown_demo=>get( ).
+  method regression_test.
+    data(demo) = zcl_markdown_demo=>get( ).
     assert_equals(
       act = demo->as_markdown( )
       exp =
@@ -115,6 +115,6 @@ CLASS lcl_test IMPLEMENTATION.
       |\| 1 \| 2 \| 3 \| 4 \|\r\n| &
       |\| e \| f \| g \| h \|\r\n| &
       |\| **bold** \| *italic* \| ***bold_italic***`code` \|  \|\r\n\r\n| ).
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

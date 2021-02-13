@@ -1,100 +1,87 @@
-CLASS zcl_markdown_data DEFINITION PUBLIC
-  INHERITING FROM zcl_markdown.
+class zcl_markdown_data definition public
+  inheriting from zcl_markdown.
 
-  PUBLIC SECTION.
+  public section.
 
-    CONSTANTS:
-      BEGIN OF initial_handling,
-        omit    TYPE string VALUE `omit`,
-        include TYPE string VALUE `include`,
-      END OF initial_handling.
+    constants:
+      begin of initial_handling,
+        omit    type string value `omit`,
+        include type string value `include`,
+      end of initial_handling.
 
-    METHODS structure
-      IMPORTING data             TYPE data
-                initial_elements TYPE abap_bool DEFAULT abap_false
-      RETURNING VALUE(self)      TYPE REF TO zcl_markdown_data.
+    methods structure
+      importing data             type data
+                initial_elements type abap_bool default abap_false
+      returning value(self)      type ref to zcl_markdown_data.
 
-    METHODS data_table
-      IMPORTING data             TYPE ANY TABLE
-                auto_header_row     TYPE abap_bool DEFAULT abap_true
-                initial_elements TYPE abap_bool DEFAULT abap_false
-      RETURNING VALUE(self)      TYPE REF TO zcl_markdown_data.
+    methods data_table
+      importing data             type any table
+                auto_header_row     type abap_bool default abap_true
+                initial_elements type abap_bool default abap_false
+      returning value(self)      type ref to zcl_markdown_data.
 
-    METHODS signature
-      IMPORTING class       TYPE string
-                method      TYPE string
-      RETURNING VALUE(self) TYPE REF TO zcl_markdown_data.
-
-  PROTECTED SECTION.
-  PRIVATE SECTION.
-ENDCLASS.
+  protected section.
+  private section.
+endclass.
 
 
 
-CLASS zcl_markdown_data IMPLEMENTATION.
+class zcl_markdown_data implementation.
 
-  METHOD structure.
-    DATA(descr) = CAST cl_abap_structdescr( cl_abap_structdescr=>describe_by_data( data ) ).
-    DATA(table_data) = VALUE stringtab( ( `Component;Value` ) ).
-    LOOP AT descr->components ASSIGNING FIELD-SYMBOL(<component>).
-      ASSIGN COMPONENT <component>-name OF STRUCTURE data TO FIELD-SYMBOL(<value>).
-      IF <value> IS NOT INITIAL.
-        APPEND |{ <component>-name };{ <value> };| TO table_data.
-      ELSE.
-        CASE initial_elements.
-          WHEN initial_handling-include.
-            APPEND |{ <component>-name };;| TO table_data.
-          WHEN OTHERS.
-            CONTINUE.
-        ENDCASE.
-      ENDIF.
-    ENDLOOP.
+  method structure.
+    data(descr) = cast cl_abap_structdescr( cl_abap_structdescr=>describe_by_data( data ) ).
+    data(table_data) = value stringtab( ( `Component;Value` ) ).
+    loop at descr->components assigning field-symbol(<component>).
+      assign component <component>-name of structure data to field-symbol(<value>).
+      if <value> is not initial.
+        append |{ <component>-name };{ <value> };| to table_data.
+      else.
+        case initial_elements.
+          when initial_handling-include.
+            append |{ <component>-name };;| to table_data.
+          when others.
+            continue.
+        endcase.
+      endif.
+    endloop.
 
     table( table_data ).
 
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD signature.
-    DATA(descr) = CAST cl_abap_classdescr( cl_abap_classdescr=>describe_by_name( class ) ).
-    heading( val = 'Attributes' level = 2 ).
-    LOOP AT descr->attributes ASSIGNING FIELD-SYMBOL(<attr>).
+  method data_table.
 
-    ENDLOOP.
-  ENDMETHOD.
+    check data is not initial.
 
-  METHOD data_table.
+    data(descr) = cast cl_abap_tabledescr( cl_abap_tabledescr=>describe_by_data( data ) ).
+    data(line_type) = descr->get_table_line_type( ).
+    case line_type->kind.
+      when cl_abap_typedescr=>kind_struct.
+        data(line_type_as_struct) = cast cl_abap_structdescr( line_type ).
+      when others.
+        raise exception new zcx_markdown( `Unsupported.` ).
+    endcase.
 
-    CHECK data IS NOT INITIAL.
+    data: md_table type stringtab.
+    if auto_header_row = abap_true.
+      data(header_column) = concat_lines_of( table =
+        value stringtab( for <c> in line_type_as_struct->components ( conv #( <c>-name ) ) ) sep = `;` ).
+      append header_column to md_table.
+    endif.
 
-    DATA(descr) = CAST cl_abap_tabledescr( cl_abap_tabledescr=>describe_by_data( data ) ).
-    DATA(line_type) = descr->get_table_line_type( ).
-    CASE line_type->kind.
-      WHEN cl_abap_typedescr=>kind_struct.
-        DATA(line_type_as_struct) = CAST cl_abap_structdescr( line_type ).
-      WHEN OTHERS.
-        RAISE EXCEPTION NEW zcx_markdown( `Unsupported.` ).
-    ENDCASE.
-
-    DATA: md_table TYPE stringtab.
-    IF auto_header_row = abap_true.
-      DATA(header_column) = concat_lines_of( table =
-        VALUE stringtab( FOR <c> IN line_type_as_struct->components ( CONV #( <c>-name ) ) ) sep = `;` ).
-      APPEND header_column TO md_table.
-    ENDIF.
-
-    LOOP AT data ASSIGNING FIELD-SYMBOL(<item>).
-      DATA(row) = ``.
-      LOOP AT line_type_as_struct->components ASSIGNING FIELD-SYMBOL(<comp>).
-        ASSIGN COMPONENT <comp>-name OF STRUCTURE <item> TO FIELD-SYMBOL(<value>).
+    loop at data assigning field-symbol(<item>).
+      data(row) = ``.
+      loop at line_type_as_struct->components assigning field-symbol(<comp>).
+        assign component <comp>-name of structure <item> to field-symbol(<value>).
         row = row && |{ <value> };|.
-      ENDLOOP.
-      APPEND row TO md_table.
-    ENDLOOP.
+      endloop.
+      append row to md_table.
+    endloop.
 
     table( md_table ).
 
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.
