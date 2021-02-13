@@ -3,7 +3,7 @@ CLASS zcl_markdown_demo DEFINITION
 
   PUBLIC SECTION.
     CLASS-METHODS get
-      RETURNING VALUE(md) TYPE REF TO zcl_markdown.
+      RETURNING VALUE(result) TYPE REF TO zcl_markdown.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -16,7 +16,7 @@ CLASS zcl_markdown_demo IMPLEMENTATION.
 
   METHOD get.
 
-    md = NEW zcl_markdown( ).
+    DATA(md) = NEW zcl_markdown( ).
     DATA(style) = md->style.
 
     md = md->heading( level = 1 val = |Markdown generator - showcase| ).
@@ -81,6 +81,8 @@ CLASS zcl_markdown_demo IMPLEMENTATION.
       ( `e;f;g;h;` )
       ( |{ style->bold( `bold` ) };{ style->italic( `italic` ) };{ style->bold_italic( `bold_italic` ) }{ style->inline_code( `code` ) };;| )
     ) ).
+
+    result = md.
   ENDMETHOD.
 
 ENDCLASS.

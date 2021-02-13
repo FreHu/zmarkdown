@@ -91,24 +91,30 @@ CLASS lcl_test IMPLEMENTATION.
       |__________ \r\n| &
       |## Code blocks\r\n| &
       |```abap\r\n| &
-      |md = md && list( VALUE stringtab(\r\n| &
-      |  ( `Item 1` )\r\n| &
-      |  ( `Item 2` )\r\n| &
-      |  ( `Item 3` )\r\n| &
-      |) ).\r\n| &
+      |  )->heading( level = 2 val = `Nested Blockquotes`\r\n| &
+      |        )->blockquote( md->document\r\n| &
       |\r\n| &
-      |md = md && numbered_list( VALUE stringtab(\r\n| &
-      |  ( `Item 1` )\r\n| &
-      |  ( `Item 2` )\r\n| &
-      |  ( `Item 3` )\r\n| &
-      |) ).\r\n| &
+      |      )->heading( level = 2 val = `Unordered Lists`\r\n| &
+      |        )->list( VALUE stringtab(\r\n| &
+      |          ( `Item 1` )\r\n| &
+      |          ( `Item 2` )\r\n| &
+      |          ( `Item 3` ) )\r\n| &
+      |\r\n| &
+      |      )->heading( level = 2 val = `Numbered Lists`\r\n| &
+      |        )->numbered_list( VALUE stringtab(\r\n| &
+      |          ( `Item 1` )\r\n| &
+      |          ( `Item 2` )\r\n| &
+      |          ( `Item 3` ) )\r\n| &
+      |      )->heading( level = 2 val = `Horizontal Rule`\r\n| &
+      |\r\n| &
+      |      )->______________________________(\r\n| &
       |```\r\n| &
       |\| col1\| col2\| col3\| col4 \|\r\n| &
       |\|------\|------\|------\|------\| \r\n| &
       |\| a \| b \| c \| d \|\r\n| &
       |\| 1 \| 2 \| 3 \| 4 \|\r\n| &
       |\| e \| f \| g \| h \|\r\n| &
-      |\| **bold** \| *italic* \| ***bold_italic***`code` \|  \|\r\n| ).
+      |\| **bold** \| *italic* \| ***bold_italic***`code` \|  \|\r\n\r\n| ).
   ENDMETHOD.
 
 ENDCLASS.
