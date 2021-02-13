@@ -148,6 +148,6 @@
         "use_line_exists": true,
         "unused_methods": true,
         "unused_types": true
-        // "unused_variables": true
+        "unused_variables": true
     }
 }
