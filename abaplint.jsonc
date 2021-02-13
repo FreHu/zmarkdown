@@ -147,7 +147,7 @@
         "xml_consistency": true,
         "use_line_exists": true,
         "unused_methods": true,
-        "unused_types": true
+        "unused_types": true,
         "unused_variables": true
     }
 }
