@@ -59,7 +59,8 @@ class zcl_markdown_data implementation.
       when cl_abap_typedescr=>kind_struct.
         data(line_type_as_struct) = cast cl_abap_structdescr( line_type ).
       when others.
-        raise exception new zcx_markdown( `Unsupported.` ).
+        blockquote( |Generation from type { line_type->get_relative_name( ) } not yet supported.| ).
+        return.
     endcase.
 
     data: md_table type stringtab.

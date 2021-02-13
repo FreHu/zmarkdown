@@ -103,20 +103,20 @@
         "ambiguous_statement": true,
         "begin_end_names": true,
         "check_transformation_exists": true,
-        "check_syntax": true,
+        // "check_syntax": true,
         "form_tables_obsolete": true,
         "tabl_enhancement_category": true,
         "implement_methods": true,
         "local_testclass_location": true,
         "main_file_contents": true,
         "rfc_error_handling": true,
-        "indentation": {
-            "alignTryCatch": false,
-            "ignoreExceptions": false,
-            "globalClassSkipFirst": false,
-            "ignoreGlobalClassDefinition": false,
-            "ignoreGlobalInterface": false
-        },
+        // "indentation": {
+        //     "alignTryCatch": false,
+        //     "ignoreExceptions": false,
+        //     "globalClassSkipFirst": false,
+        //     "ignoreGlobalClassDefinition": false,
+        //     "ignoreGlobalInterface": false
+        // },
         "sequential_blank": {
             "lines": 4
         },

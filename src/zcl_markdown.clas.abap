@@ -129,7 +129,9 @@ class zcl_markdown implementation.
   endmethod.
 
   method as_html.
-    result = cl_ktd_dita_markdown_api=>transform_md_to_html( document ).
+    data(transformed) = cl_ktd_dita_markdown_api=>transform_md_to_html(
+      iv_markdown = document iv_body_only = abap_true ).
+    result = zcl_markdown_html=>html( transformed ).
   endmethod.
 
   method table.
