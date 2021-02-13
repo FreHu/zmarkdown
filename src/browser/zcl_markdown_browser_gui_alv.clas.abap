@@ -14,7 +14,7 @@ class zcl_markdown_browser_gui_alv definition
       importing layout type lvc_s_layo.
 
     methods set_lines
-      importing lines type zif_markdown_docu_browser_types=>t_grid_lines.
+      importing lines type zif_markdown_browser_types=>t_grid_lines.
 
     methods display.
 
@@ -25,11 +25,11 @@ class zcl_markdown_browser_gui_alv definition
   private section.
     methods get_clicked_row
       importing row_index     type lvc_index
-      returning value(result) type zif_markdown_docu_browser_types=>t_grid_line.
+      returning value(result) type zif_markdown_browser_types=>t_grid_line.
 
     data gui type ref to zcl_markdown_browser_gui.
     data grid type ref to cl_gui_alv_grid.
-    data lines type zif_markdown_docu_browser_types=>t_grid_lines.
+    data lines type zif_markdown_browser_types=>t_grid_lines.
     data catalog type lvc_t_fcat.
     data layout type lvc_s_layo.
 endclass.

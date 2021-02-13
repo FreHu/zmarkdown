@@ -8,8 +8,8 @@ start-of-selection.
 
 form everything.
 
-  data(objects) = value zif_markdown_docu_browser_types=>t_objects( ).
-  data(select) = new zcl_markdown_browser_data_select( ).
+  data(objects) = value zif_markdown_browser_types=>t_objects( ).
+  data(select) = new zcl_markdown_browser_select( ).
   if x_one = abap_true.
     objects = select->single_object(
       object_type = p_type

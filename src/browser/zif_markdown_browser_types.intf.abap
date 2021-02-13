@@ -1,4 +1,4 @@
-interface zif_markdown_docu_browser_types public.
+interface zif_markdown_browser_types public.
 
   types:
     begin of t_selection,

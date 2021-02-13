@@ -1,4 +1,4 @@
-class zcl_markdown_browser_data_select definition
+class zcl_markdown_browser_select definition
   public final.
 
   public section.
@@ -6,29 +6,29 @@ class zcl_markdown_browser_data_select definition
     methods single_object
       importing object_type   type tadir-object
                 object_name   type tadir-obj_name
-      returning value(result) type zif_markdown_docu_browser_types=>t_objects.
+      returning value(result) type zif_markdown_browser_types=>t_objects.
 
     methods multiple_objects
-      importing object_types  type zif_markdown_docu_browser_types=>t_selection-object_types
-                object_names  type zif_markdown_docu_browser_types=>t_selection-object_names
-      returning value(result) type zif_markdown_docu_browser_types=>t_objects.
+      importing object_types  type zif_markdown_browser_types=>t_selection-object_types
+                object_names  type zif_markdown_browser_types=>t_selection-object_names
+      returning value(result) type zif_markdown_browser_types=>t_objects.
 
     methods package
       importing package_name  type devclass
-      returning value(result) type zif_markdown_docu_browser_types=>t_objects.
+      returning value(result) type zif_markdown_browser_types=>t_objects.
 
   protected section.
   private section.
 
     methods get_subpackages
       importing root_package   type devclass
-      returning value(results) type zif_markdown_docu_browser_types=>t_packages.
+      returning value(results) type zif_markdown_browser_types=>t_packages.
 
 endclass.
 
 
 
-class zcl_markdown_browser_data_select implementation.
+class zcl_markdown_browser_select implementation.
 
   method multiple_objects.
     select * from tadir
@@ -53,7 +53,7 @@ class zcl_markdown_browser_data_select implementation.
 
   method package.
 
-    data(package_list) = value zif_markdown_docu_browser_types=>t_packages( ( package_name ) ).
+    data(package_list) = value zif_markdown_browser_types=>t_packages( ( package_name ) ).
     append lines of get_subpackages( package_name ) to package_list.
 
     data(package_range) = new zcl_markdown_browser_range(

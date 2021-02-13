@@ -7,10 +7,10 @@ class zcl_markdown_browser_gui definition
         importing
           screen_number  type sy-dynnr
           value(program) type sy-repid
-          objects        type zif_markdown_docu_browser_types=>t_objects,
+          objects        type zif_markdown_browser_types=>t_objects,
       show_results_for
         importing
-          object type zif_markdown_docu_browser_types=>t_grid_line.
+          object type zif_markdown_browser_types=>t_grid_line.
 
     data:
       splitter          type ref to cl_gui_splitter_container read-only,
@@ -20,8 +20,8 @@ class zcl_markdown_browser_gui definition
       alv_grid_left     type ref to zcl_markdown_browser_gui_alv read-only,
       html_viewer_right type ref to zcl_markdown_browser_gui_html read-only,
 
-      objects           type zif_markdown_docu_browser_types=>t_objects read-only,
-      results           type zif_markdown_docu_browser_types=>t_object_result_map read-only.
+      objects           type zif_markdown_browser_types=>t_objects read-only,
+      results           type zif_markdown_browser_types=>t_object_result_map read-only.
 
 
   protected section.
@@ -75,7 +75,7 @@ class zcl_markdown_browser_gui implementation.
     me->alv_grid_left->set_field_catalog( field_catalog ).
     me->alv_grid_left->set_layout( value #( zebra = abap_true ) ).
 
-    data(grid_lines) = value zif_markdown_docu_browser_types=>t_grid_lines(
+    data(grid_lines) = value zif_markdown_browser_types=>t_grid_lines(
       for <o> in objects
         ( object_type = <o>-object
           object_name = <o>-obj_name

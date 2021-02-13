@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>ZCL_MARKDOWN_BROWSER_GUI_HTML</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>SORC test report html viewer abstraction</DESCRIPT>
+    <DESCRIPT>zMarkdown Documentation Browser html viewer abstraction</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>

@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_MARKDOWN_BROWSER_DATA_SELECT</CLSNAME>
+    <CLSNAME>ZCL_MARKDOWN_BROWSER_SELECT</CLSNAME>
     <LANGU>E</LANGU>
     <DESCRIPT>Methods for object selection</DESCRIPT>
     <STATE>1</STATE>
