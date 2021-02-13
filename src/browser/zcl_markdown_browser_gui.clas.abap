@@ -28,6 +28,7 @@ class zcl_markdown_browser_gui definition
   private section.
     methods setup_left_grid.
 
+
 endclass.
 
 
@@ -88,8 +89,25 @@ class zcl_markdown_browser_gui implementation.
   endmethod.
 
   method show_results_for.
-    return.
-    " todo show markdown html
+    if object-object_type = 'CLAS'.
+      try.
+          data(html) = new zcl_markdown_docu_clas( conv #( object-object_name ) )->as_html( ).
+          me->html_viewer_right->display_string( html ).
+        catch zcx_markdown into data(cx).
+          me->html_viewer_right->display_string(
+        |<html><body>| &&
+        |<h1>Problem</h1>| &&
+        |Exception occurred when generating, { cx->reason }| &&
+        |</body></html>| ).
+      endtry.
+    else.
+      me->html_viewer_right->display_string(
+      |<html><body>| &&
+      |<h1>Not Supported</h1>| &&
+      |Documentation not yet supported for object type { object-object_type }| &&
+      |</body></html>| ).
+    endif.
   endmethod.
+
 
 endclass.

@@ -2,9 +2,9 @@ selection-screen begin of block mode
   with frame title text-003.
 
   parameters:
-    x_one  radiobutton group fsrc user-command sel_mode default 'X',
-    x_more radiobutton group fsrc,
-    x_pkg  radiobutton group fsrc.
+    x_pkg  radiobutton group fsrc  default 'X' user-command sel_mode,
+    x_one  radiobutton group fsrc,
+    x_more radiobutton group fsrc.
 
 selection-screen end of block mode.
 
