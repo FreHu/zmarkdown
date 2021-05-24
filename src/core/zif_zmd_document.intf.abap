@@ -1,61 +1,61 @@
-INTERFACE zif_zmd_document PUBLIC.
+interface zif_zmd_document public.
 
-  DATA: content TYPE string READ-ONLY.
+  data: content type string read-only.
 
-  CONSTANTS:
-    BEGIN OF style,
-      none        TYPE string VALUE 'none',
-      bold        TYPE string VALUE 'bold',
-      italic      TYPE string VALUE 'italic',
-      bold_italic TYPE string VALUE 'bold_italic',
-      italic_bold TYPE string VALUE 'italic_bold',
-      inline_code TYPE string VALUE 'inline_code',
-    END OF style.
+  constants:
+    begin of style,
+      none        type string value 'none',
+      bold        type string value 'bold',
+      italic      type string value 'italic',
+      bold_italic type string value 'bold_italic',
+      italic_bold type string value 'italic_bold',
+      inline_code type string value 'inline_code',
+    end of style.
 
 
   methods render
-    RETURNING VALUE(result) type string.
+    returning value(result) type string.
 
 
   "! Horizontal rule
-  METHODS ______________________________
-    RETURNING VALUE(self) TYPE REF TO zif_zmd_document.
+  methods ______________________________
+    returning value(self) type ref to zif_zmd_document.
 
   "! Heading
-  METHODS heading
-    IMPORTING level       TYPE i
-              val         TYPE string
-    RETURNING VALUE(self) TYPE REF TO zif_zmd_document.
+  methods heading
+    importing level       type i
+              val         type string
+    returning value(self) type ref to zif_zmd_document.
 
-  METHODS text
-    IMPORTING val         TYPE string
-              style       TYPE string DEFAULT style-none
-    RETURNING VALUE(self) TYPE REF TO zif_zmd_document.
+  methods text
+    importing val         type string
+              style       type string default style-none
+    returning value(self) type ref to zif_zmd_document.
 
-  METHODS raw
-    IMPORTING val         TYPE string
-    RETURNING VALUE(self) TYPE REF TO zif_zmd_document.
+  methods raw
+    importing val         type string
+    returning value(self) type ref to zif_zmd_document.
 
-  METHODS blockquote
-    IMPORTING val         TYPE string
-    RETURNING VALUE(self) TYPE REF TO zif_zmd_document.
+  methods blockquote
+    importing val         type string
+    returning value(self) type ref to zif_zmd_document.
 
-  METHODS list
-    IMPORTING items       TYPE stringtab
-    RETURNING VALUE(self) TYPE REF TO zif_zmd_document.
+  methods list
+    importing items       type stringtab
+    returning value(self) type ref to zif_zmd_document.
 
-  METHODS numbered_list
-    IMPORTING items       TYPE stringtab
-    RETURNING VALUE(self) TYPE REF TO zif_zmd_document.
+  methods numbered_list
+    importing items       type stringtab
+    returning value(self) type ref to zif_zmd_document.
 
-  METHODS code_block
-    IMPORTING val         TYPE string
-              language    TYPE string DEFAULT `abap`
-    RETURNING VALUE(self) TYPE REF TO zif_zmd_document.
+  methods code_block
+    importing val         type string
+              language    type string default `abap`
+    returning value(self) type ref to zif_zmd_document.
 
-  METHODS table
-    IMPORTING lines       TYPE stringtab
-              delimiter   TYPE string DEFAULT `;`
-    RETURNING VALUE(self) TYPE REF TO zif_zmd_document.
+  methods table
+    importing lines       type stringtab
+              delimiter   type string default `;`
+    returning value(self) type ref to zif_zmd_document.
 
-ENDINTERFACE.
+endinterface.

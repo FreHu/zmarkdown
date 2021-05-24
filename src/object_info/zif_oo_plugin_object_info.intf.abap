@@ -1,14 +1,14 @@
-INTERFACE zif_oo_plugin_object_info PUBLIC.
+interface zif_oo_plugin_object_info public.
 
-  INTERFACES: zif_oo_plugin.
+  interfaces: zif_oo_plugin.
 
-  TYPES: t_content_type TYPE string.
-  CONSTANTS: category TYPE string VALUE `OBJECT_INFO`.
+  
+  constants: category type string value `OBJECT_INFO`.
 
-  METHODS display
-    IMPORTING
-      object_type TYPE tadir-object
-      object_name TYPE tadir-obj_name
-      gui_control TYPE REF TO cl_gui_html_viewer.
+  methods display
+    importing
+      object_type type tadir-object
+      object_name type tadir-obj_name
+      gui_control type ref to cl_gui_html_viewer.
 
-ENDINTERFACE.
+endinterface.

@@ -1,29 +1,29 @@
-CLASS zcl_markdown_demo DEFINITION
-  PUBLIC FINAL.
+class zcl_markdown_demo definition
+  public final.
 
-  PUBLIC SECTION.
-    CLASS-METHODS get
-      RETURNING VALUE(result) TYPE string.
+  public section.
+    class-methods get
+      returning value(result) type string.
 
-  PROTECTED SECTION.
-  PRIVATE SECTION.
+  protected section.
+  private section.
 
-ENDCLASS.
-
-
-CLASS zcl_markdown_demo IMPLEMENTATION.
+endclass.
 
 
-  METHOD get.
+class zcl_markdown_demo implementation.
 
-    DATA(md) = NEW zcl_markdown_data( NEW zcl_markdown( ) ).
-    DATA(doc) = md->doc.
+
+  method get.
+
+    data(md) = new zcl_markdown_data( new zcl_markdown( ) ).
+    data(doc) = md->doc.
 
     doc = doc->heading( level = 1 val = |Markdown generator - showcase| ).
 
-    DO 6 TIMES.
+    do 6 times.
       doc = doc->heading( level = sy-index val = |Heading { sy-index }| ).
-    ENDDO.
+    enddo.
 
     doc->text( val = 'This is text.'
       )->text( val = 'This is bold text.' style = 'bold'
@@ -34,12 +34,12 @@ CLASS zcl_markdown_demo IMPLEMENTATION.
       )->heading( level = 2 val = `Nested Blockquotes`
               )->blockquote( doc->content
       )->heading( level = 2 val = `Unordered Lists`
-              )->list( VALUE stringtab(
+              )->list( value stringtab(
                 ( `Item 1` )
                 ( `Item 2` )
                 ( `Item 3` ) )
       )->heading( level = 2 val = `Numbered Lists`
-              )->numbered_list( VALUE stringtab(
+              )->numbered_list( value stringtab(
                 ( `Item 1` )
                 ( `Item 2` )
                 ( `Item 3` ) )
@@ -64,7 +64,7 @@ CLASS zcl_markdown_demo IMPLEMENTATION.
         |      )->heading( level = 2 val = `Horizontal Rule`\r\n| &
         |\r\n| &
         |      )->______________________________(|
-    )->table( VALUE stringtab(
+    )->table( value stringtab(
       ( `col1;col2;col3;col4;` )
       ( `a;b;c;d` )
       ( `1;2;3;4;`)
@@ -72,6 +72,6 @@ CLASS zcl_markdown_demo IMPLEMENTATION.
     ) ).
 
     result = doc->content.
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

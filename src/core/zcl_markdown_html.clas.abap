@@ -4,123 +4,123 @@
 "!  <li>Common javascript</li>
 "!  <li>Methods for basic html elements</li>
 "! </ul>
-CLASS zcl_markdown_html DEFINITION PUBLIC.
+class zcl_markdown_html definition public.
 
-  PUBLIC SECTION.
+  public section.
 
 
-    INTERFACES: zif_zmd_document.
-    ALIASES: ______________________________ FOR zif_zmd_document~______________________________,
-             heading FOR zif_zmd_document~heading,
-             text FOR zif_zmd_document~text,
-             blockquote FOR zif_zmd_document~blockquote,
-             list FOR zif_zmd_document~list,
-             numbered_list FOR zif_zmd_document~numbered_list,
-             code_block FOR zif_zmd_document~code_block,
-             table FOR zif_zmd_document~table,
-             render FOR zif_zmd_document~render,
-             document FOR zif_zmd_document~content.
+    interfaces: zif_zmd_document.
+    aliases: ______________________________ for zif_zmd_document~______________________________,
+             heading for zif_zmd_document~heading,
+             text for zif_zmd_document~text,
+             blockquote for zif_zmd_document~blockquote,
+             list for zif_zmd_document~list,
+             numbered_list for zif_zmd_document~numbered_list,
+             code_block for zif_zmd_document~code_block,
+             table for zif_zmd_document~table,
+             render for zif_zmd_document~render,
+             document for zif_zmd_document~content.
 
-    TYPES: html_string   TYPE string,
-           html_document TYPE string.
+    types: html_string   type string,
+           html_document type string.
 
-    CLASS-DATA: common_style TYPE string,
-                common_js    TYPE string.
+    class-data: common_style type string,
+                common_js    type string.
 
-    CLASS-METHODS: class_constructor,
-      html IMPORTING val         TYPE any OPTIONAL
-           RETURNING VALUE(html) TYPE html_document,
+    class-methods: class_constructor,
+      html importing val         type any optional
+           returning value(html) type html_document,
 
       "! Common javascript is placed at the end of the body tag
-      body IMPORTING val         TYPE any OPTIONAL
-           RETURNING VALUE(html) TYPE html_string,
+      body importing val         type any optional
+           returning value(html) type html_string,
 
-      li IMPORTING val         TYPE any OPTIONAL
-                   omit_empty  TYPE abap_bool DEFAULT abap_false
-         RETURNING VALUE(html) TYPE html_string,
+      li importing val         type any optional
+                   omit_empty  type abap_bool default abap_false
+         returning value(html) type html_string,
 
-      th IMPORTING val         TYPE any OPTIONAL
-         RETURNING VALUE(html) TYPE html_string,
+      th importing val         type any optional
+         returning value(html) type html_string,
 
-      tr IMPORTING val         TYPE any OPTIONAL
-         RETURNING VALUE(html) TYPE html_string,
+      tr importing val         type any optional
+         returning value(html) type html_string,
 
-      td IMPORTING val         TYPE any OPTIONAL
-                   omit_empty  TYPE abap_bool DEFAULT abap_false
-         RETURNING VALUE(html) TYPE html_string,
+      td importing val         type any optional
+                   omit_empty  type abap_bool default abap_false
+         returning value(html) type html_string,
 
-      b IMPORTING val         TYPE any
-        RETURNING VALUE(html) TYPE html_string,
+      b importing val         type any
+        returning value(html) type html_string,
 
-      i IMPORTING val         TYPE any
-        RETURNING VALUE(html) TYPE html_string,
+      i importing val         type any
+        returning value(html) type html_string,
 
-      ul IMPORTING val         TYPE any
-         RETURNING VALUE(html) TYPE html_string,
+      ul importing val         type any
+         returning value(html) type html_string,
 
-      ol IMPORTING val         TYPE any
-         RETURNING VALUE(html) TYPE html_string,
+      ol importing val         type any
+         returning value(html) type html_string,
 
-      h1 IMPORTING val         TYPE any
-         RETURNING VALUE(html) TYPE html_string,
+      h1 importing val         type any
+         returning value(html) type html_string,
 
-      h2 IMPORTING val         TYPE any
-         RETURNING VALUE(html) TYPE html_string,
+      h2 importing val         type any
+         returning value(html) type html_string,
 
-      h3 IMPORTING val         TYPE any
-         RETURNING VALUE(html) TYPE html_string,
+      h3 importing val         type any
+         returning value(html) type html_string,
 
-      a IMPORTING href        TYPE any
-                  val         TYPE any
-        RETURNING VALUE(html) TYPE html_string,
+      a importing href        type any
+                  val         type any
+        returning value(html) type html_string,
 
-      table_header IMPORTING content     TYPE string
-                   RETURNING VALUE(html) TYPE html_string.
+      table_header importing content     type string
+                   returning value(html) type html_string.
 
-    CLASS-METHODS      br RETURNING VALUE(html) TYPE html_string.
+    class-methods      br returning value(html) type html_string.
 
-  PROTECTED SECTION.
-  PRIVATE SECTION.
+  protected section.
+  private section.
 
-ENDCLASS.
+endclass.
 
 
 
-CLASS zcl_markdown_html IMPLEMENTATION.
+class zcl_markdown_html implementation.
 
-  METHOD class_constructor.
+  method class_constructor.
     common_style =
-    |<link href="https://unpkg.com/fundamental-styles@latest/dist/fundamental-styles.css" rel="stylesheet">| &&
-    |<style>| &&
-      `tr:nth-child(odd){ background: "#eeeeee" }` && |\r\n| &&
-    |@font-face \{\r\n| &
-    |    font-family: "72";\r\n| &
-    |    src: url("~@sap-theming/theming-base-content/content/Base/baseLib/sap_base_fiori/fonts/72-Regular-full.woff")\r\n| &
-    |        format("woff");\r\n| &
-    |    font-weight: normal;\r\n| &
-    |    font-style: normal;\r\n| &
-    |\}| &&
-    |@font-face \{\r\n| &
-    |    font-family: "SAP-icons";\r\n| &
-    |    src: url("~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/fonts/SAP-icons.woff")\r\n| &
-    |        format("woff");\r\n| &
-    |    font-weight: normal;\r\n| &
-    |    font-style: normal;\r\n| &
-    |\}\r\n| &
-    |\r\n| &
-    |html \{\r\n| &
-    |  font-size: 16px;\r\n| &
-    |\}| &&
-    |</style>|.
+|<link href="https://unpkg.com/fundamental-styles@latest/dist/fundamental-styles.css" rel="stylesheet">| &&
+|<style>| &&
+  `tr:nth-child(odd){ background: "#eeeeee" }` && |\r\n| &&
+|@font-face \{\r\n| &
+|font-family: "72";\r\n| &
+|src: url("~@sap-theming/theming-base-content/content/Base/baseLib/sap_base_fiori/fonts/72-Regular-full.woff")\r\n| &
+|    format("woff");\r\n| &
+|    font-weight: normal;\r\n| &
+|    font-style: normal;\r\n| &
+|\}| &&
+|@font-face \{\r\n| &
+|    font-family: "SAP-icons";\r\n| &
+|    src: url("~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/fonts/SAP-icons.woff")\r\n| &
+|        format("woff");\r\n| &
+|    font-weight: normal;\r\n| &
+|    font-style: normal;\r\n| &
+|\}\r\n| &
+|\r\n| &
+|html \{\r\n| &
+|  font-size: 16px;\r\n| &
+|\}| &&
+|</style>|.
 
     common_js = |<script>| && |</script>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD body.
+  method body.
     html = |<body class="fd-page fd-page--home fd-page--list">{ val }{ common_js }</body>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD html.
+  method html.
     html =
     |<html>| &&
       |<head>| &&
@@ -129,168 +129,168 @@ CLASS zcl_markdown_html IMPLEMENTATION.
       |</head>| &&
       val &&
     |</html>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD li.
-    html = COND #(
-     WHEN omit_empty = abap_true AND val = `` THEN ``
-     ELSE |<li>{ val }</li>| ).
-  ENDMETHOD.
+  method li.
+    html = cond #(
+     when omit_empty = abap_true and val = `` then ``
+     else |<li>{ val }</li>| ).
+  endmethod.
 
-  METHOD table.
+  method table.
 
-    IF lines IS INITIAL OR lines( lines ) = 1.
+    if lines is initial or lines( lines ) = 1.
       text( '[Empty table]' ).
-      RETURN.
-    ENDIF.
+      return.
+    endif.
 
-    DATA(header) = lines[ 1 ].
-    SPLIT header AT delimiter INTO TABLE DATA(columns).
+    data(header) = lines[ 1 ].
+    split header at delimiter into table data(columns).
 
-    DATA(header_str) = table_header( REDUCE string( INIT res = ``
-      FOR <x> IN columns
-      NEXT res = res && th( <x> ) ) ).
+    data(header_str) = table_header( reduce string( init res = ``
+      for <x> in columns
+      next res = res && th( <x> ) ) ).
 
-    DATA: items type string.
-    LOOP AT lines ASSIGNING FIELD-SYMBOL(<line>) FROM 2.
-      SPLIT <line> AT delimiter INTO TABLE columns.
-      DATA(row) = tr( REDUCE string( INIT res = ``
-        FOR <x> IN columns
-        NEXT res = res && td( val = <x> ) ) ).
+    data: items type string.
+    loop at lines assigning field-symbol(<line>) from 2.
+      split <line> at delimiter into table columns.
+      data(row) = tr( reduce string( init res = ``
+        for <x> in columns
+        next res = res && td( val = <x> ) ) ).
       items = items && row.
-    ENDLOOP.
+    endloop.
 
     document = document && |<table class="fd-table">| &&
     |{ header_str } | &&
     |  <tbody class="fd-table__body">{ items }</tbody>| &&
     |</table>|.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD td.
-    html = COND #(
-      WHEN omit_empty = abap_true AND val = `` THEN ``
-      ELSE |<td>{ val }</td>| ).
-  ENDMETHOD.
+  method td.
+    html = cond #(
+      when omit_empty = abap_true and val = `` then ``
+      else |<td>{ val }</td>| ).
+  endmethod.
 
-  METHOD th.
+  method th.
     html = |<th class="fd-table__cell">{ val }</th>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD tr.
+  method tr.
     html = |<tr class="fd-table__row fd-table__row--focusable">{ val }</tr>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD b.
+  method b.
     html = |<b>{ val }</b>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD i.
+  method i.
     html = |<i>{ val }</i>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD ul.
+  method ul.
     html = |<ul>{ val }</ul>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD ol.
+  method ol.
     html = |<ol>{ val }</ol>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD h1.
+  method h1.
     html = |<h1 class="fd-title fd-title--h1">{ val }</h1>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD h2.
+  method h2.
     html = |<h2 class="fd-title fd-title--h2">{ val }</h2>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD h3.
+  method h3.
     html = |<h3 fd-title fd-title--h3">{ val }</h3>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD a.
+  method a.
     html = |<a href="{ href }" class="fd-link">{ val }</a>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD br.
+  method br.
     html = |<br/>\r\n|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~blockquote.
+  method zif_zmd_document~blockquote.
     document = document && |<blockquote>{ val }</blockquote>|.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~code_block.
+  method zif_zmd_document~code_block.
     document = document && |<pre>{ val }</pre>|.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~heading.
+  method zif_zmd_document~heading.
     document = document && |<h{ level } class="fd-title fd-title--h{ level }">{ val }</h{ level }>|.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~list.
-    ol( REDUCE string( INIT res = ``
-              FOR <i> IN items
-              NEXT res = res && li( val = <i> ) ) ).
+  method zif_zmd_document~list.
+    ol( reduce string( init res = ``
+              for <i> in items
+              next res = res && li( val = <i> ) ) ).
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~numbered_list.
-    ul( REDUCE string( INIT res = ``
-          FOR <i> IN items
-          NEXT res = res && li( val = <i> ) ) ).
+  method zif_zmd_document~numbered_list.
+    ul( reduce string( init res = ``
+          for <i> in items
+          next res = res && li( val = <i> ) ) ).
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~text.
+  method zif_zmd_document~text.
 
-    CASE style.
+    case style.
 
-      WHEN zif_zmd_document=>style-bold_italic.
-      WHEN zif_zmd_document=>style-italic_bold.
+      when zif_zmd_document=>style-bold_italic.
+      when zif_zmd_document=>style-italic_bold.
         document = document && |<p><b><i>{ val }</i></b></p>|.
 
-      WHEN zif_zmd_document=>style-bold.
+      when zif_zmd_document=>style-bold.
         document = document && |<p><b>{ val }</b></p>|.
 
-      WHEN zif_zmd_document=>style-italic.
+      when zif_zmd_document=>style-italic.
         document = document && |<p><i>{ val }</i></p>|.
 
-      WHEN zif_zmd_document=>style-inline_code.
+      when zif_zmd_document=>style-inline_code.
         document = document && |<i>{ val }</i>|. " todo
 
-      WHEN zif_zmd_document=>style-none.
+      when zif_zmd_document=>style-none.
         document = document && |<p>{ val }</p>|.
 
-    ENDCASE.
+    endcase.
 
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~______________________________.
+  method zif_zmd_document~______________________________.
     document = document && `<hr/>`.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~render.
+  method zif_zmd_document~render.
     result = html( body( document ) ).
-  ENDMETHOD.
+  endmethod.
 
-  METHOD table_header.
+  method table_header.
     html = |<thead class="fd-table__header">\r\n| &
            |    <tr class="fd-table__row">| &&
                     content &&
            |    </tr>\r\n| &
            |</thead>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~raw.
+  method zif_zmd_document~raw.
     document = document && val.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

@@ -1,114 +1,114 @@
-CLASS zcl_markdown_docu_meth DEFINITION PUBLIC
-  INHERITING FROM zcl_markdown_data.
+class zcl_markdown_docu_meth definition public
+  inheriting from zcl_markdown_data.
 
-  PUBLIC SECTION.
-    TYPES:
-      BEGIN OF t_method_param,
-        name          TYPE string,
-        kind          TYPE string,
-        by_value      TYPE abap_bool,
-        optional      TYPE seooptionl,
-        default_value TYPE seovalue,
-        type          TYPE string,
-      END OF t_method_param,
-      t_method_params TYPE STANDARD TABLE OF t_method_param WITH EMPTY KEY,
+  public section.
+    types:
+      begin of t_method_param,
+        name          type string,
+        kind          type string,
+        by_value      type abap_bool,
+        optional      type seooptionl,
+        default_value type seovalue,
+        type          type string,
+      end of t_method_param,
+      t_method_params type standard table of t_method_param with empty key,
 
-      BEGIN OF t_seosubcodf,
-        type       TYPE string,
-        tableof    TYPE string,
-        paroptionl TYPE seooptionl,
-        parvalue   TYPE seovalue,
-      END OF t_seosubcodf.
+      begin of t_seosubcodf,
+        type       type string,
+        tableof    type string,
+        paroptionl type seooptionl,
+        parvalue   type seovalue,
+      end of t_seosubcodf.
 
-    METHODS constructor
-      IMPORTING descr      TYPE abap_methdescr
-                class_name TYPE seoclsname
-                document   TYPE REF TO zif_zmd_document.
+    methods constructor
+      importing descr      type abap_methdescr
+                class_name type seoclsname
+                document   type ref to zif_zmd_document.
 
-    METHODS parmkind_to_string
-      IMPORTING
-        parmkind      TYPE abap_parmkind
-      RETURNING
-        VALUE(result) TYPE string.
+    methods parmkind_to_string
+      importing
+        parmkind      type abap_parmkind
+      returning
+        value(result) type string.
 
-  PROTECTED SECTION.
-  PRIVATE SECTION.
+  protected section.
+  private section.
 
-ENDCLASS.
+endclass.
 
 
 
-CLASS zcl_markdown_docu_meth IMPLEMENTATION.
+class zcl_markdown_docu_meth implementation.
 
-  METHOD constructor.
+  method constructor.
 
     super->constructor( document ).
 
-    DATA(method_name) = descr-name.
-    DATA(params) = VALUE t_method_params( ).
-    LOOP AT descr-parameters ASSIGNING FIELD-SYMBOL(<p>).
+    data(method_name) = descr-name.
+    data(params) = value t_method_params( ).
+    loop at descr-parameters assigning field-symbol(<p>).
 
-      DATA: seosubcodf TYPE t_seosubcodf.
-      SELECT SINGLE type, tableof, paroptionl, parvalue INTO CORRESPONDING FIELDS OF @seosubcodf
-      FROM seosubcodf
-               WHERE clsname = @class_name
-                 AND cmpname = @method_name
-                 AND sconame = @<p>-name.
+      data: seosubcodf type t_seosubcodf.
+      select single type, tableof, paroptionl, parvalue into corresponding fields of @seosubcodf
+      from seosubcodf
+               where clsname = @class_name
+                 and cmpname = @method_name
+                 and sconame = @<p>-name.
 
-      APPEND VALUE #(
+      append value #(
         name = to_lower( <p>-name )
         kind = parmkind_to_string( <p>-parm_kind )
         by_value = <p>-by_value
         optional = seosubcodf-paroptionl
         default_value = seosubcodf-parvalue
-        type = COND #(
-          WHEN seosubcodf-tableof = abap_true THEN 'table of' )  && |{ seosubcodf-type }| )
-      TO params.
+        type = cond #(
+          when seosubcodf-tableof = abap_true then 'table of' )  && |{ seosubcodf-type }| )
+      to params.
 
-    ENDLOOP.
+    endloop.
 
     doc->heading( level = 3 val = |{ to_lower( descr-name ) }| ).
 
-    IF params IS NOT INITIAL.
-      TYPES:
-        BEGIN OF t_param,
-          kind TYPE string,
-          name TYPE string,
-          type TYPE string,
-        END OF t_param,
-        t_params TYPE STANDARD TABLE OF t_param WITH EMPTY KEY.
-      DATA(parameters) = VALUE t_params(
-        FOR <param> IN params (
-          kind = parmkind_to_string( CONV #( <param>-kind ) )
+    if params is not initial.
+      types:
+        begin of t_param,
+          kind type string,
+          name type string,
+          type type string,
+        end of t_param,
+        t_params type standard table of t_param with empty key.
+      data(parameters) = value t_params(
+        for <param> in params (
+          kind = parmkind_to_string( conv #( <param>-kind ) )
           name = <param>-name
           type = <param>-type ) ).
       doc->heading( level = 4 val = `Parameters` ).
       data_table( data = parameters ).
-    ENDIF.
+    endif.
 
-    IF descr-exceptions IS NOT INITIAL.
+    if descr-exceptions is not initial.
       doc->heading( level = 4 val = `Exceptions` ).
-      DATA(exceptions) = VALUE stringtab( FOR <x> IN descr-exceptions (
-        COND #( WHEN <x>-is_resumable = abap_true
-          THEN |{ <x>-name } [Resumable]|
-          ELSE <x>-name ) ) ).
+      data(exceptions) = value stringtab( for <x> in descr-exceptions (
+        cond #( when <x>-is_resumable = abap_true
+          then |{ <x>-name } [Resumable]|
+          else <x>-name ) ) ).
       data_table( data = exceptions auto_header_row = abap_false ).
-    ENDIF.
+    endif.
 
-  ENDMETHOD.
+  endmethod.
 
-  METHOD parmkind_to_string.
-    result = SWITCH #( parmkind
-      WHEN 'I'
-        THEN 'Importing'
-      WHEN 'E'
-        THEN 'Exporting'
-      WHEN 'C'
-        THEN 'Changing'
-      WHEN 'R'
-        THEN 'Returning'
-      ELSE parmkind ).
-  ENDMETHOD.
+  method parmkind_to_string.
+    result = switch #( parmkind
+      when 'I'
+        then 'Importing'
+      when 'E'
+        then 'Exporting'
+      when 'C'
+        then 'Changing'
+      when 'R'
+        then 'Returning'
+      else parmkind ).
+  endmethod.
 
 
-ENDCLASS.
+endclass.

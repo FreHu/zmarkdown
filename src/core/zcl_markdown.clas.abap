@@ -1,126 +1,126 @@
-CLASS zcl_markdown DEFINITION PUBLIC.
+class zcl_markdown definition public.
 
-  PUBLIC SECTION.
+  public section.
 
-    INTERFACES: zif_zmd_document.
-    ALIASES: ______________________________ FOR zif_zmd_document~______________________________,
-             heading FOR zif_zmd_document~heading,
-             text FOR zif_zmd_document~text,
-             blockquote FOR zif_zmd_document~blockquote,
-             list FOR zif_zmd_document~list,
-             numbered_list FOR zif_zmd_document~numbered_list,
-             code_block FOR zif_zmd_document~code_block,
-             table FOR zif_zmd_document~table,
-             render FOR zif_zmd_document~render,
+    interfaces: zif_zmd_document.
+    aliases: ______________________________ for zif_zmd_document~______________________________,
+             heading for zif_zmd_document~heading,
+             text for zif_zmd_document~text,
+             blockquote for zif_zmd_document~blockquote,
+             list for zif_zmd_document~list,
+             numbered_list for zif_zmd_document~numbered_list,
+             code_block for zif_zmd_document~code_block,
+             table for zif_zmd_document~table,
+             render for zif_zmd_document~render,
 
-             document FOR zif_zmd_document~content.
+             document for zif_zmd_document~content.
 
-    DATA: style    TYPE REF TO zcl_markdown_style.
+    data: style    type ref to zcl_markdown_style.
 
-    METHODS constructor.
+    methods constructor.
 
-  PRIVATE SECTION.
-    METHODS append_line
-      IMPORTING val TYPE string.
+  private section.
+    methods append_line
+      importing val type string.
 
-    CLASS-METHODS n_times
-      IMPORTING val           TYPE string
-                n             TYPE i
-      RETURNING VALUE(result) TYPE string.
-ENDCLASS.
+    class-methods n_times
+      importing val           type string
+                n             type i
+      returning value(result) type string.
+endclass.
 
 
 
-CLASS zcl_markdown IMPLEMENTATION.
+class zcl_markdown implementation.
 
-  METHOD constructor.
-    me->style = NEW #( ).
-  ENDMETHOD.
+  method constructor.
+    me->style = new #( ).
+  endmethod.
 
-  METHOD zif_zmd_document~render.
+  method zif_zmd_document~render.
     result = document.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~text.
+  method zif_zmd_document~text.
 
-    CASE style.
+    case style.
 
-      WHEN zif_zmd_document=>style-bold_italic.
-      WHEN zif_zmd_document=>style-italic_bold.
+      when zif_zmd_document=>style-bold_italic.
+      when zif_zmd_document=>style-italic_bold.
         document = document && |***{ val }***\r\n|.
 
-      WHEN zif_zmd_document=>style-bold.
+      when zif_zmd_document=>style-bold.
         document = document && |**{ val }**\r\n|.
 
-      WHEN zif_zmd_document=>style-italic.
+      when zif_zmd_document=>style-italic.
         document = document && |*{ val }*\r\n|.
 
-      WHEN zif_zmd_document=>style-inline_code.
+      when zif_zmd_document=>style-inline_code.
         document = document && |`{ val }`\r\n|.
 
-      WHEN zif_zmd_document=>style-none.
+      when zif_zmd_document=>style-none.
         document = document && |{ val }\r\n|.
-    ENDCASE.
+    endcase.
 
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~blockquote.
-    SPLIT val AT |\r\n| INTO TABLE DATA(lines).
-    LOOP AT lines ASSIGNING FIELD-SYMBOL(<line>).
+  method zif_zmd_document~blockquote.
+    split val at |\r\n| into table data(lines).
+    loop at lines assigning field-symbol(<line>).
       document = document && |> { <line> }\r\n|.
-    ENDLOOP.
+    endloop.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~list.
-    LOOP AT items ASSIGNING FIELD-SYMBOL(<item>).
+  method zif_zmd_document~list.
+    loop at items assigning field-symbol(<item>).
       document = document && |- { <item> }\r\n|.
-    ENDLOOP.
+    endloop.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~numbered_list.
-    DATA(index) = 0.
-    LOOP AT items ASSIGNING FIELD-SYMBOL(<item>).
+  method zif_zmd_document~numbered_list.
+    data(index) = 0.
+    loop at items assigning field-symbol(<item>).
       index = index + 1.
       document = document && |{ index }. { <item> }\r\n|.
-    ENDLOOP.
+    endloop.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD n_times.
-    DO n TIMES.
+  method n_times.
+    do n times.
       result = result && val.
-    ENDDO.
-  ENDMETHOD.
+    enddo.
+  endmethod.
 
-  METHOD zif_zmd_document~code_block.
+  method zif_zmd_document~code_block.
     document = document && |```{ language }\r\n{ val }\r\n```\r\n|.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~heading.
+  method zif_zmd_document~heading.
 
-    IF level < 1 OR level > 6.
-      RAISE EXCEPTION NEW zcx_markdown( reason = 'Invalid heading level.' ).
-    ENDIF.
+    if level < 1 or level > 6.
+      raise exception new zcx_markdown( reason = 'Invalid heading level.' ).
+    endif.
 
     document = document && |{ n_times( val = `#` n = level ) } { val }\r\n|.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
 
-  METHOD zif_zmd_document~______________________________.
+  method zif_zmd_document~______________________________.
     document = document && |{ n_times( val = `_` n = 10 ) } \r\n|.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~table.
-    TRY.
-        CHECK lines( lines ) > 0.
-        DATA(header) = lines[ 1 ].
-        SPLIT header AT delimiter INTO TABLE DATA(columns).
+  method zif_zmd_document~table.
+    try.
+        check lines( lines ) > 0.
+        data(header) = lines[ 1 ].
+        split header at delimiter into table data(columns).
 
         "| col1 | col2 | col3 | col4 |
         append_line( `| ` && concat_lines_of( table = columns sep = `| ` ) && ` |` ).
@@ -128,26 +128,26 @@ CLASS zcl_markdown IMPLEMENTATION.
         "|------|------|------|------|
         append_line( n_times( val = `|------` n = lines( columns ) ) && `| ` ).
 
-        LOOP AT lines ASSIGNING FIELD-SYMBOL(<line>) FROM 2.
-          SPLIT <line> AT delimiter INTO TABLE columns.
+        loop at lines assigning field-symbol(<line>) from 2.
+          split <line> at delimiter into table columns.
           " | a    | b    | c    | d    |
           append_line( `| ` && concat_lines_of( table = columns sep = ` | ` ) && ` |` ).
-        ENDLOOP.
+        endloop.
 
         append_line( `` ).
 
-      CATCH cx_root INTO DATA(cx).
-        RAISE EXCEPTION NEW zcx_markdown( reason = `Invalid table data.` previous = cx ).
-    ENDTRY.
+      catch cx_root into data(cx).
+        raise exception new zcx_markdown( reason = `Invalid table data.` previous = cx ).
+    endtry.
     self = me.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD append_line.
+  method append_line.
     document = document && val && |\r\n|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_zmd_document~raw.
+  method zif_zmd_document~raw.
     document = document && val.
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

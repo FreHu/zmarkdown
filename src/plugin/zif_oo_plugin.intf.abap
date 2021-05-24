@@ -1,17 +1,17 @@
-INTERFACE zif_oo_plugin PUBLIC.
+interface zif_oo_plugin public.
 
-  CONSTANTS: plugin_interface TYPE seoclsname VALUE `ZIF_OO_PLUGIN`.
+  constants: plugin_interface type seoclsname value `ZIF_OO_PLUGIN`.
 
-  TYPES:
-    BEGIN OF t_plugin_info,
-      id          TYPE string,
-      category    TYPE string,
-      class_name  TYPE seoclsname,
-      description TYPE string,
-    END OF t_plugin_info,
-    tt_plugin_info TYPE HASHED TABLE OF t_plugin_info WITH UNIQUE KEY id.
+  types:
+    begin of t_plugin_info,
+      id          type string,
+      category    type string,
+      class_name  type seoclsname,
+      description type string,
+    end of t_plugin_info.
+    
 
-  METHODS get_info RETURNING VALUE(result) TYPE t_plugin_info.
-  METHODS is_enabled RETURNING VALUE(result) TYPE abap_bool.
+  methods get_info returning value(result) type t_plugin_info.
+  methods is_enabled returning value(result) type abap_bool.
 
-ENDINTERFACE.
+endinterface.

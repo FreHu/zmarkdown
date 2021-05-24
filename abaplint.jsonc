@@ -58,7 +58,7 @@
         "method_length": {
             "errorWhenEmpty": true,
             "ignoreTestClasses": false,
-            "statements": 30
+            "statements": 50
         },
         "mix_returning": true,
         "msag_consistency": true,
@@ -79,7 +79,13 @@
             "setExtended": true,
             "withHeaderLine": true,
             "load": true,
-            "typePools": true
+            "typePools": true,
+            "freeMemory": true,
+            "selectWithoutInto": true,
+            "communication": true,
+            "pack": true,
+            "parameter": true,
+            "ranges": true
         },
         "parser_error": true,
         "preferred_compare_operator": {

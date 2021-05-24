@@ -1,117 +1,112 @@
-CLASS zcl_oo_plugin_object_info_html DEFINITION
-  PUBLIC FINAL CREATE PUBLIC.
+class zcl_oo_plugin_object_info_html definition
+  public final create public.
 
-  PUBLIC SECTION.
+  public section.
 
-    INTERFACES: zif_oo_plugin_object_info.
+    interfaces: zif_oo_plugin_object_info.
 
-    METHODS constructor.
-
-    METHODS:
+    methods:
       display_string
-        IMPORTING html_string         TYPE string
-        RETURNING VALUE(assigned_url) TYPE w3url.
+        importing html_string         type string
+        returning value(assigned_url) type w3url.
 
-  PROTECTED SECTION.
-  PRIVATE SECTION.
+  protected section.
+  private section.
     "! Base sapgui control
-    DATA gui_control TYPE REF TO cl_gui_html_viewer.
-    METHODS:
-      string_to_bintab IMPORTING html_string   TYPE string
-                       RETURNING VALUE(result) TYPE lvc_t_mime.
+    data gui_control type ref to cl_gui_html_viewer.
+    methods:
+      string_to_bintab importing html_string   type string
+                       returning value(result) type lvc_t_mime.
 
-ENDCLASS.
+endclass.
 
 
 
-CLASS zcl_oo_plugin_object_info_html IMPLEMENTATION.
+class zcl_oo_plugin_object_info_html implementation.
 
-  METHOD constructor.
-  ENDMETHOD.
+  method display_string.
 
-  METHOD display_string.
-
-    DATA(binary_data) = string_to_bintab( html_string ).
+    data(binary_data) = string_to_bintab( html_string ).
     gui_control->load_data(
-      EXPORTING
+      exporting
         type         = `text`
         subtype      = `html`
-      IMPORTING
+      importing
         assigned_url = assigned_url
-      CHANGING
+      changing
         data_table   = binary_data
-      EXCEPTIONS
-        OTHERS       = 1 ).
+      exceptions
+        others       = 1 ).
 
-    CHECK sy-subrc = 0.
+    check sy-subrc = 0.
 
     gui_control->show_url(
-      EXPORTING url = assigned_url
-      EXCEPTIONS OTHERS = 1 ).
+      exporting url = assigned_url
+      exceptions others = 1 ).
 
-    CHECK sy-subrc = 0.
-  ENDMETHOD.
+    check sy-subrc = 0.
+  endmethod.
 
-  METHOD string_to_bintab.
+  method string_to_bintab.
 
-    TRY.
-        DATA(html_xstring) = cl_bcs_convert=>string_to_xstring( iv_string = html_string ).
-        CHECK html_xstring IS NOT INITIAL.
-      CATCH cx_bcs.
-        RETURN.
-    ENDTRY.
+    try.
+        data(html_xstring) = cl_bcs_convert=>string_to_xstring( iv_string = html_string ).
+        check html_xstring is not initial.
+      catch cx_bcs.
+        return.
+    endtry.
 
-    DATA: bin_size TYPE i.
+    data: bin_size type i.
 
-    CALL FUNCTION 'SCMS_XSTRING_TO_BINARY'
-      EXPORTING
+    call function 'SCMS_XSTRING_TO_BINARY'
+      exporting
         buffer        = html_xstring
-      IMPORTING
+      importing
         output_length = bin_size
-      TABLES
+      tables
         binary_tab    = result.
 
-    CHECK sy-subrc = 0.
-  ENDMETHOD.
+    check sy-subrc = 0.
+  endmethod.
 
-  METHOD zif_oo_plugin_object_info~display.
+  method zif_oo_plugin_object_info~display.
 
     me->gui_control = gui_control.
 
-    IF object_type = 'CLAS'.
-      TRY.
-          DATA(html) = NEW zcl_markdown_docu_clas(
-            class_name = CONV #( object_name )
-            document = NEW zcl_markdown_html( ) ).
+    if object_type = 'CLAS'.
+      try.
+          data(html) = new zcl_markdown_docu_clas(
+            class_name = conv #( object_name )
+            document = new zcl_markdown_html( ) ).
           display_string(
             zcl_markdown_html=>html(
               zcl_markdown_html=>body( html->doc->content ) ) ).
-        CATCH zcx_markdown INTO DATA(cx).
+        catch zcx_markdown into data(cx).
           display_string(
         |<html><body>| &&
         |<h1>Problem</h1>| &&
         |Exception occurred when generating, { cx->reason }| &&
         |</body></html>| ).
-      ENDTRY.
-    ELSE.
+      endtry.
+    else.
       display_string(
       |<html><body>| &&
       |<h1>Not Supported</h1>| &&
       |Documentation not yet supported for object type { object_type }| &&
       |</body></html>| ).
-    ENDIF.
+    endif.
 
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_oo_plugin~get_info.
+  method zif_oo_plugin~get_info.
     result-category = zif_oo_plugin_object_info=>category.
     result-id = 'ZMARKDOWN_RENDER_HTML'.
     result-description = 'Render html'.
     result-class_name = 'ZCL_MARKDOWN_BROWSER_GUI_HTML'.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_oo_plugin~is_enabled.
+  method zif_oo_plugin~is_enabled.
     result = abap_true.
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.
