@@ -15,7 +15,7 @@ class lcl_test implementation.
   method regression_test.
     data(demo) = zcl_markdown_demo=>get( ).
     assert_equals(
-      act = demo->as_markdown( )
+      act = demo
       exp =
       |# Markdown generator - showcase\r\n| &
       |# Heading 1\r\n| &

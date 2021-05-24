@@ -425,19 +425,19 @@
     <item>
      <ID>I</ID>
      <KEY>001</KEY>
-     <ENTRY>Single object selection</ENTRY>
+     <ENTRY>Single Object Selection</ENTRY>
      <LENGTH>46</LENGTH>
     </item>
     <item>
      <ID>I</ID>
      <KEY>002</KEY>
-     <ENTRY>Multiple object selection</ENTRY>
+     <ENTRY>Multiple Object Selection</ENTRY>
      <LENGTH>50</LENGTH>
     </item>
     <item>
      <ID>I</ID>
      <KEY>003</KEY>
-     <ENTRY>Selection mode</ENTRY>
+     <ENTRY>Selection Mode</ENTRY>
      <LENGTH>24</LENGTH>
     </item>
     <item>
@@ -447,42 +447,54 @@
      <LENGTH>17</LENGTH>
     </item>
     <item>
+     <ID>I</ID>
+     <KEY>005</KEY>
+     <ENTRY>Output Mode</ENTRY>
+     <LENGTH>17</LENGTH>
+    </item>
+    <item>
      <ID>R</ID>
      <ENTRY>zMarkdown Documentation Browser</ENTRY>
      <LENGTH>31</LENGTH>
     </item>
     <item>
      <ID>S</ID>
+     <KEY>P_MODE</KEY>
+     <ENTRY>Output mode</ENTRY>
+     <LENGTH>19</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
      <KEY>P_NAME</KEY>
-     <ENTRY>.</ENTRY>
+     <ENTRY>Object Name</ENTRY>
      <LENGTH>19</LENGTH>
      <SPLIT>D</SPLIT>
     </item>
     <item>
      <ID>S</ID>
      <KEY>P_PKG</KEY>
-     <ENTRY>.</ENTRY>
-     <LENGTH>9</LENGTH>
+     <ENTRY>Package</ENTRY>
+     <LENGTH>15</LENGTH>
      <SPLIT>D</SPLIT>
     </item>
     <item>
      <ID>S</ID>
      <KEY>P_TYPE</KEY>
-     <ENTRY>.</ENTRY>
+     <ENTRY>Object Type</ENTRY>
      <LENGTH>19</LENGTH>
      <SPLIT>D</SPLIT>
     </item>
     <item>
      <ID>S</ID>
      <KEY>S_NAME</KEY>
-     <ENTRY>.</ENTRY>
+     <ENTRY>Object Name</ENTRY>
      <LENGTH>19</LENGTH>
      <SPLIT>D</SPLIT>
     </item>
     <item>
      <ID>S</ID>
      <KEY>S_TYPE</KEY>
-     <ENTRY>.</ENTRY>
+     <ENTRY>Object Type</ENTRY>
      <LENGTH>19</LENGTH>
      <SPLIT>D</SPLIT>
     </item>

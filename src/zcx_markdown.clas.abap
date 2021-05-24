@@ -1,22 +1,23 @@
-class zcx_markdown definition
-  public final
-  inheriting from cx_no_check.
+CLASS zcx_markdown DEFINITION
+  PUBLIC FINAL
+  INHERITING FROM cx_no_check.
 
-  public section.
-    methods constructor
-      importing reason type string.
+  PUBLIC SECTION.
+    METHODS constructor
+      IMPORTING reason   TYPE string
+                previous TYPE REF TO cx_root OPTIONAL.
 
-    data reason type string read-only.
-  protected section.
-  private section.
-endclass.
+    DATA reason TYPE string READ-ONLY.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
 
 
 
-class zcx_markdown implementation.
-  method constructor ##ADT_SUPPRESS_GENERATION.
-    super->constructor( ).
+CLASS zcx_markdown IMPLEMENTATION.
+  METHOD constructor ##ADT_SUPPRESS_GENERATION.
+    super->constructor( previous = previous ).
     me->reason = reason.
-  endmethod.
+  ENDMETHOD.
 
-endclass.
+ENDCLASS.

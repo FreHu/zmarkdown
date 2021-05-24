@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DEVC>
-    <CTEXT>Markdown Documentation Browser</CTEXT>
+    <CTEXT>Markdown Generator Core</CTEXT>
     <PACKTYPE>H</PACKTYPE>
    </DEVC>
   </asx:values>

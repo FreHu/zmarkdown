@@ -1,59 +1,68 @@
-selection-screen begin of block mode
-  with frame title text-003.
+SELECTION-SCREEN BEGIN OF BLOCK mode
+  WITH FRAME TITLE TEXT-003.
 
-  parameters:
-    x_pkg  radiobutton group fsrc  default 'X' user-command sel_mode,
-    x_one  radiobutton group fsrc,
-    x_more radiobutton group fsrc.
+  PARAMETERS:
+    x_pkg  RADIOBUTTON GROUP fsrc  DEFAULT 'X' USER-COMMAND sel_mode,
+    x_one  RADIOBUTTON GROUP fsrc,
+    x_more RADIOBUTTON GROUP fsrc.
 
-selection-screen end of block mode.
+SELECTION-SCREEN END OF BLOCK mode.
 
-selection-screen begin of block b_single
-  with frame title text-001.
+SELECTION-SCREEN BEGIN OF BLOCK b_single
+  WITH FRAME TITLE TEXT-001.
 
-  parameters:
-    p_type like tadir-object modif id sgl,
-    p_name like tadir-obj_name modif id sgl.
+  PARAMETERS:
+    p_type LIKE tadir-object MODIF ID sgl,
+    p_name LIKE tadir-obj_name MODIF ID sgl.
 
-selection-screen end of block b_single.
+SELECTION-SCREEN END OF BLOCK b_single.
 
-selection-screen begin of block b_multiple
-  with frame title text-002.
+SELECTION-SCREEN BEGIN OF BLOCK b_multiple
+  WITH FRAME TITLE TEXT-002.
 
-  select-options:
-      s_type for tadir-object modif id mtp,
-      s_name for tadir-obj_name modif id mtp.
+  SELECT-OPTIONS:
+      s_type FOR tadir-object MODIF ID mtp,
+      s_name FOR tadir-obj_name MODIF ID mtp.
 
-selection-screen end of block b_multiple.
+SELECTION-SCREEN END OF BLOCK b_multiple.
 
-selection-screen begin of block b_package
-  with frame title text-004.
+SELECTION-SCREEN BEGIN OF BLOCK b_package
+  WITH FRAME TITLE TEXT-004.
 
-  parameters:
-       p_pkg like tdevc-devclass modif id pkg.
+  PARAMETERS:
+       p_pkg LIKE tdevc-devclass MODIF ID pkg.
 
-selection-screen end of block b_package.
+SELECTION-SCREEN END OF BLOCK b_package.
 
-at selection-screen output.
-  loop at screen into data(wa).
-    case wa-group1.
-      when 'SGL'.
-        if x_one = abap_false.
+SELECTION-SCREEN BEGIN OF BLOCK b_mode
+  WITH FRAME TITLE TEXT-005.
+
+  PARAMETERS:
+    p_mode TYPE c LENGTH 30 AS LISTBOX VISIBLE LENGTH 30.
+
+SELECTION-SCREEN END OF BLOCK b_mode.
+
+
+AT SELECTION-SCREEN OUTPUT.
+  LOOP AT SCREEN INTO DATA(wa).
+    CASE wa-group1.
+      WHEN 'SGL'.
+        IF x_one = abap_false.
           wa-active = '0'.
-          modify screen.
-          continue.
-        endif.
-      when 'MTP'.
-        if x_more = abap_false.
+          MODIFY SCREEN.
+          CONTINUE.
+        ENDIF.
+      WHEN 'MTP'.
+        IF x_more = abap_false.
           wa-active = '0'.
-          modify screen.
-          continue.
-        endif.
-      when 'PKG'.
-        if x_pkg = abap_false.
+          MODIFY SCREEN.
+          CONTINUE.
+        ENDIF.
+      WHEN 'PKG'.
+        IF x_pkg = abap_false.
           wa-active = '0'.
-          modify screen.
-          continue.
-        endif.
-    endcase.
-  endloop.
+          MODIFY SCREEN.
+          CONTINUE.
+        ENDIF.
+    ENDCASE.
+  ENDLOOP.

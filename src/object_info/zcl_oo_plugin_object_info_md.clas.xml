@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_MARKDOWN_BROWSER_GUI_HTML</CLSNAME>
+    <CLSNAME>ZCL_OO_PLUGIN_OBJECT_INFO_MD</CLSNAME>
     <LANGU>E</LANGU>
     <DESCRIPT>zMarkdown Documentation Browser html viewer abstraction</DESCRIPT>
     <STATE>1</STATE>
