@@ -34,25 +34,34 @@ selection-screen begin of block b_package
 
 selection-screen end of block b_package.
 
+selection-screen begin of block b_mode
+  with frame title text-005.
+
+  parameters:
+    p_mode type c length 30 as listbox visible length 30.
+
+selection-screen end of block b_mode.
+
+
 at selection-screen output.
-  loop at screen into data(wa).
+  loop at SCREEN into data(wa).
     case wa-group1.
       when 'SGL'.
         if x_one = abap_false.
           wa-active = '0'.
-          modify screen.
+          modify SCREEN.
           continue.
         endif.
       when 'MTP'.
         if x_more = abap_false.
           wa-active = '0'.
-          modify screen.
+          modify SCREEN.
           continue.
         endif.
       when 'PKG'.
         if x_pkg = abap_false.
           wa-active = '0'.
-          modify screen.
+          modify SCREEN.
           continue.
         endif.
     endcase.

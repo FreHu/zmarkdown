@@ -22,7 +22,8 @@ class zcl_markdown_docu_meth definition public
 
     methods constructor
       importing descr      type abap_methdescr
-                class_name type seoclsname.
+                class_name type seoclsname
+                document   type ref to zif_zmd_document.
 
     methods parmkind_to_string
       importing
@@ -41,7 +42,7 @@ class zcl_markdown_docu_meth implementation.
 
   method constructor.
 
-    super->constructor( ).
+    super->constructor( document ).
 
     data(method_name) = descr-name.
     data(params) = value t_method_params( ).
@@ -60,13 +61,13 @@ class zcl_markdown_docu_meth implementation.
         by_value = <p>-by_value
         optional = seosubcodf-paroptionl
         default_value = seosubcodf-parvalue
-        type = style->inline_code( cond #(
-          when seosubcodf-tableof = abap_true then 'table of' )  && |{ seosubcodf-type }| ) )
+        type = cond #(
+          when seosubcodf-tableof = abap_true then 'table of' )  && |{ seosubcodf-type }| )
       to params.
 
     endloop.
 
-    heading( level = 3 val = |{ to_lower( descr-name ) }| ).
+    doc->heading( level = 3 val = |{ to_lower( descr-name ) }| ).
 
     if params is not initial.
       types:
@@ -81,12 +82,12 @@ class zcl_markdown_docu_meth implementation.
           kind = parmkind_to_string( conv #( <param>-kind ) )
           name = <param>-name
           type = <param>-type ) ).
-      heading( level = 4 val = `Parameters` ).
+      doc->heading( level = 4 val = `Parameters` ).
       data_table( data = parameters ).
     endif.
 
     if descr-exceptions is not initial.
-      heading( level = 4 val = `Exceptions` ).
+      doc->heading( level = 4 val = `Exceptions` ).
       data(exceptions) = value stringtab( for <x> in descr-exceptions (
         cond #( when <x>-is_resumable = abap_true
           then |{ <x>-name } [Resumable]|
@@ -98,15 +99,15 @@ class zcl_markdown_docu_meth implementation.
 
   method parmkind_to_string.
     result = switch #( parmkind
-    when 'I'
-      then 'Importing'
-    when 'E'
-      then 'Exporting'
-    when 'C'
-      then 'Changing'
-    when 'R'
-      then 'Returning'
-    else parmkind ).
+      when 'I'
+        then 'Importing'
+      when 'E'
+        then 'Exporting'
+      when 'C'
+        then 'Changing'
+      when 'R'
+        then 'Returning'
+      else parmkind ).
   endmethod.
 
 

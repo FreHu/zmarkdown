@@ -2,54 +2,22 @@ class zcl_markdown definition public.
 
   public section.
 
-    data: document type string read-only,
-          style    type ref to zcl_markdown_style.
+    interfaces: zif_zmd_document.
+    aliases: ______________________________ for zif_zmd_document~______________________________,
+             heading for zif_zmd_document~heading,
+             text for zif_zmd_document~text,
+             blockquote for zif_zmd_document~blockquote,
+             list for zif_zmd_document~list,
+             numbered_list for zif_zmd_document~numbered_list,
+             code_block for zif_zmd_document~code_block,
+             table for zif_zmd_document~table,
+             render for zif_zmd_document~render,
+
+             document for zif_zmd_document~content.
+
+    data: style    type ref to zcl_markdown_style.
 
     methods constructor.
-
-    "! Horizontal rule
-    methods ______________________________
-      returning value(self) type ref to zcl_markdown.
-
-    "! Heading (###)
-    methods heading
-      importing level       type i
-                val         type string
-      returning value(self) type ref to zcl_markdown.
-
-    methods text
-      importing val         type string
-      returning value(self) type ref to zcl_markdown.
-
-    methods blockquote
-      importing val         type string
-      returning value(self) type ref to zcl_markdown.
-
-    methods list
-      importing items       type stringtab
-      returning value(self) type ref to zcl_markdown.
-
-    methods numbered_list
-      importing items       type stringtab
-      returning value(self) type ref to zcl_markdown.
-
-    methods code_block
-      importing val         type string
-                language    type string default `abap`
-      returning value(self) type ref to zcl_markdown.
-
-    methods table
-      importing lines       type stringtab
-                delimiter   type string default `;`
-      returning value(self) type ref to zcl_markdown.
-
-    methods as_markdown
-      returning
-        value(result) type string.
-
-    methods as_html
-      returning
-        value(result) type string.
 
   private section.
     methods append_line
@@ -69,12 +37,35 @@ class zcl_markdown implementation.
     me->style = new #( ).
   endmethod.
 
-  method text.
-    document = document && |{ val }\r\n|.
+  method zif_zmd_document~render.
+    result = document.
+  endmethod.
+
+  method zif_zmd_document~text.
+
+    case style.
+
+      when zif_zmd_document=>style-bold_italic.
+      when zif_zmd_document=>style-italic_bold.
+        document = document && |***{ val }***\r\n|.
+
+      when zif_zmd_document=>style-bold.
+        document = document && |**{ val }**\r\n|.
+
+      when zif_zmd_document=>style-italic.
+        document = document && |*{ val }*\r\n|.
+
+      when zif_zmd_document=>style-inline_code.
+        document = document && |`{ val }`\r\n|.
+
+      when zif_zmd_document=>style-none.
+        document = document && |{ val }\r\n|.
+    endcase.
+
     self = me.
   endmethod.
 
-  method blockquote.
+  method zif_zmd_document~blockquote.
     split val at |\r\n| into table data(lines).
     loop at lines assigning field-symbol(<line>).
       document = document && |> { <line> }\r\n|.
@@ -82,14 +73,14 @@ class zcl_markdown implementation.
     self = me.
   endmethod.
 
-  method list.
+  method zif_zmd_document~list.
     loop at items assigning field-symbol(<item>).
       document = document && |- { <item> }\r\n|.
     endloop.
     self = me.
   endmethod.
 
-  method numbered_list.
+  method zif_zmd_document~numbered_list.
     data(index) = 0.
     loop at items assigning field-symbol(<item>).
       index = index + 1.
@@ -104,12 +95,12 @@ class zcl_markdown implementation.
     enddo.
   endmethod.
 
-  method code_block.
+  method zif_zmd_document~code_block.
     document = document && |```{ language }\r\n{ val }\r\n```\r\n|.
     self = me.
   endmethod.
 
-  method heading.
+  method zif_zmd_document~heading.
 
     if level < 1 or level > 6.
       raise exception new zcx_markdown( reason = 'Invalid heading level.' ).
@@ -119,23 +110,15 @@ class zcl_markdown implementation.
     self = me.
   endmethod.
 
-  method as_markdown.
-    result = document.
-  endmethod.
 
-  method ______________________________.
+  method zif_zmd_document~______________________________.
     document = document && |{ n_times( val = `_` n = 10 ) } \r\n|.
     self = me.
   endmethod.
 
-  method as_html.
-    data(transformed) = cl_ktd_dita_markdown_api=>transform_md_to_html(
-      iv_markdown = document iv_body_only = abap_true ).
-    result = zcl_markdown_html=>html( transformed ).
-  endmethod.
-
-  method table.
+  method zif_zmd_document~table.
     try.
+        check lines( lines ) > 0.
         data(header) = lines[ 1 ].
         split header at delimiter into table data(columns).
 
@@ -153,14 +136,18 @@ class zcl_markdown implementation.
 
         append_line( `` ).
 
-      catch cx_root.
-        raise exception new zcx_markdown( reason = `Invalid table data.` ).
+      catch cx_root into data(cx).
+        raise exception new zcx_markdown( reason = `Invalid table data.` previous = cx ).
     endtry.
     self = me.
   endmethod.
 
   method append_line.
     document = document && val && |\r\n|.
+  endmethod.
+
+  method zif_zmd_document~raw.
+    document = document && val.
   endmethod.
 
 endclass.

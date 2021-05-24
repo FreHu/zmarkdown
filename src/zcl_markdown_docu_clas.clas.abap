@@ -14,7 +14,8 @@ class zcl_markdown_docu_clas definition public
       t_attributes type standard table of t_attribute with empty key.
 
     methods constructor
-      importing class_name type seoclsname.
+      importing class_name type seoclsname
+                document   type ref to zif_zmd_document.
 
   private section.
     data: descr type ref to cl_abap_classdescr.
@@ -28,26 +29,31 @@ class zcl_markdown_docu_clas implementation.
 
   method constructor.
 
-    super->constructor( ).
+    super->constructor( document ).
     descr = cast #( cl_abap_classdescr=>describe_by_name( class_name ) ).
 
-    heading( level = 1 val = descr->get_relative_name( ) ).
+    doc->heading( level = 1 val = to_lower( descr->get_relative_name( ) ) ).
+
+    doc->______________________________( ).
 
     if descr->interfaces is not initial.
-      heading( level = 2 val = `Interfaces` ).
+      doc->heading( level = 2 val = `Interfaces` ).
       data_table( data = descr->interfaces auto_header_row = abap_false ).
     endif.
 
+    doc->______________________________( ).
+
     if descr->types is not initial.
-      heading( level = 2 val = `Types` ).
+      doc->heading( level = 2 val = `Types` ).
       data_table( data = descr->types auto_header_row = abap_false ).
     endif.
 
+    doc->______________________________( ).
+
     if descr->methods is not initial.
-      heading( level = 2 val = `Methods` ).
+      doc->heading( level = 2 val = `Methods` ).
       loop at descr->methods assigning field-symbol(<method>).
-        data(method_md) = new zcl_markdown_docu_meth( class_name = class_name descr = <method> ).
-        text( method_md->as_markdown( ) ).
+        data_table( data = descr->types auto_header_row = abap_false ).
       endloop.
     endif.
 
@@ -58,7 +64,7 @@ class zcl_markdown_docu_clas implementation.
   method attributes.
 
     if descr->attributes is not initial.
-      heading( level = 2 val = `Attributes` ).
+      doc->heading( level = 2 val = `Attributes` ).
 
       data: attributes type t_attributes.
       loop at descr->attributes assigning field-symbol(<attr>)
@@ -74,7 +80,7 @@ class zcl_markdown_docu_clas implementation.
       endloop.
 
       if attributes is not initial.
-        heading( level = 3 val = 'Constants' ).
+        doc->heading( level = 3 val = 'Constants' ).
         data_table( attributes ).
         clear attributes.
       endif.
@@ -92,7 +98,7 @@ class zcl_markdown_docu_clas implementation.
       endloop.
 
       if attributes is not initial.
-        heading( level = 3 val = 'Class Attributes' ).
+        doc->heading( level = 3 val = 'Class Attributes' ).
         data_table( attributes ).
         clear attributes.
       endif.
@@ -110,7 +116,7 @@ class zcl_markdown_docu_clas implementation.
       endloop.
 
       if attributes is not initial.
-        heading( level = 3 val = 'Member Attributes' ).
+        doc->heading( level = 3 val = 'Member Attributes' ).
         data_table( attributes ).
         clear attributes.
       endif.

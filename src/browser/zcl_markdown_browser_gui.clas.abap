@@ -2,12 +2,15 @@ class zcl_markdown_browser_gui definition
   public final create public.
 
   public section.
-    methods:
+    methods
       constructor
         importing
           screen_number  type sy-dynnr
           value(program) type sy-repid
-          objects        type zif_markdown_browser_types=>t_objects,
+          objects        type zif_markdown_browser_types=>t_objects
+          mode_id           type zif_oo_plugin=>t_plugin_info-id.
+
+    methods
       show_results_for
         importing
           object type zif_markdown_browser_types=>t_grid_line.
@@ -18,8 +21,9 @@ class zcl_markdown_browser_gui definition
       left_container    type ref to cl_gui_container read-only,
       right_container   type ref to cl_gui_container read-only,
       alv_grid_left     type ref to zcl_markdown_browser_gui_alv read-only,
-      html_viewer_right type ref to zcl_markdown_browser_gui_html read-only,
+      html_viewer_right type ref to cl_gui_html_viewer read-only,
 
+      mode              type ref to zif_oo_plugin_object_info read-only,
       objects           type zif_markdown_browser_types=>t_objects read-only,
       results           type zif_markdown_browser_types=>t_object_result_map read-only.
 
@@ -58,10 +62,13 @@ class zcl_markdown_browser_gui implementation.
       gui  = me
       grid = new #( i_parent = me->left_container ) ).
 
-    me->html_viewer_right = new #(
-      new #( parent = me->right_container ) ).
+    me->html_viewer_right = new #( parent = right_container ).
 
     setup_left_grid( ).
+
+    me->mode = cast #( zcl_oo_plugin_provider=>get_by_id(
+      category = zif_oo_plugin_object_info=>category
+      id = mode_id )-instance ).
 
   endmethod.
 
@@ -89,24 +96,10 @@ class zcl_markdown_browser_gui implementation.
   endmethod.
 
   method show_results_for.
-    if object-object_type = 'CLAS'.
-      try.
-          data(html) = new zcl_markdown_docu_clas( conv #( object-object_name ) )->as_html( ).
-          me->html_viewer_right->display_string( html ).
-        catch zcx_markdown into data(cx).
-          me->html_viewer_right->display_string(
-        |<html><body>| &&
-        |<h1>Problem</h1>| &&
-        |Exception occurred when generating, { cx->reason }| &&
-        |</body></html>| ).
-      endtry.
-    else.
-      me->html_viewer_right->display_string(
-      |<html><body>| &&
-      |<h1>Not Supported</h1>| &&
-      |Documentation not yet supported for object type { object-object_type }| &&
-      |</body></html>| ).
-    endif.
+    mode->display(
+      object_type = object-object_type
+      object_name = object-object_name
+      gui_control = me->html_viewer_right ).
   endmethod.
 
 

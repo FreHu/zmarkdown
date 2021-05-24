@@ -4,7 +4,33 @@ tables tadir.
 include zmarkdown_browser_screen.
 
 start-of-selection.
+  data: modes type zcl_oo_plugin_provider=>tt_implementations.
   perform everything.
+
+initialization.
+  try.
+      modes = zcl_oo_plugin_provider=>get_enabled( zif_oo_plugin_object_info=>category ).
+      p_mode = modes[ 1 ]-info-id.
+    catch cx_root.
+      message 'No plugin implementations found' type 'S' display like 'E'.
+      return.
+  endtry.
+
+at selection-screen on value-request for p_mode.
+
+  data: listbox_values type vrm_values.
+  listbox_values = value #( for <x> in modes (
+    key = <x>-instance->get_info( )-id
+    text = <x>-instance->get_info( )-description ) ).
+
+  call function 'VRM_SET_VALUES'
+    exporting
+      id              = 'P_MODE'
+      values          = listbox_values
+    exceptions
+      id_illegal_name = 1
+      others          = 2.
+
 
 form everything.
 
@@ -30,10 +56,7 @@ form everything.
     message 'Selection empty' type 'S' display like 'E'.
     return.
   else.
-    new zcl_markdown_browser_gui(
-      program = sy-repid
-      screen_number = '0999'
-      objects = objects ).
+    
 
     call screen 0999.
   endif.
@@ -50,7 +73,5 @@ module user_command_0999 input.
   case sy-ucomm.
     when 'BACK' or 'EXIT' or 'CANCEL'.
       leave to screen 0.
-    when 'REFRESH'.
-      message 'Not yet implemented' type 'S' display like 'E'.
   endcase.
 endmodule.
